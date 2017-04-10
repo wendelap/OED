@@ -12,6 +12,8 @@ export const UPDATE_BAR_DURATION = 'UPDATE_BAR_DURATION';
 export const CHANGE_CHART_TO_RENDER = 'CHANGE_CHART_TO_RENDER';
 export const CHANGE_BAR_STACKING = 'CHANGE_BAR_STACKING';
 export const CHANGE_GRAPH_ZOOM = 'CHANGE_GRAPH_ZOOM';
+export const REQUEST_BASELINE_DATA = 'REQUEST_BASELINE_DATA';
+export const RECEIVE_BASELINE_DATA = 'RECEIVE_BASELINE_DATA';
 
 /**
  * @param {string} chartType is either chartTypes.line or chartTypes.bar
@@ -23,6 +25,14 @@ export function changeChartToRender(chartType) {
 
 export function changeBarStacking() {
 	return { type: CHANGE_BAR_STACKING };
+
+
+export function requestBaselineData(meters) {
+	return { type: REQUEST_BASELINE_DATA, meters };
+}
+
+export function receiveBaselineData(meters, baselines) {
+	return { type: RECEIVE_BASELINE_DATA, meters, baselines };
 }
 
 export function updateSelectedMeters(meterIDs) {
@@ -31,6 +41,15 @@ export function updateSelectedMeters(meterIDs) {
 
 export function updateBarDuration(barDuration) {
 	return { type: UPDATE_BAR_DURATION, barDuration };
+}
+
+
+function fetchBaselineData(meters) {
+	return dispatch => {
+		dispatch(requestBaselineData(meters);
+		const stringifiedMeterIDs = meters.join(',');
+	return axios.get('/api/baseline/values/${stringifiedMeterIDs}').then(response => dispatch(receiveBaselineData(meters, response.data)));
+	};
 }
 
 export function changeBarDuration(barDuration) {

@@ -53,6 +53,7 @@ async function createSchema() {
 	const Meter = require('./Meter');
 	const Reading = require('./Reading');
 	const User = require('./User');
+	const Baseline = require('./Baseline');
 	/* eslint-enable global-require */
 	await Meter.createMeterTypesEnum();
 	await Meter.createTable();
@@ -60,6 +61,7 @@ async function createSchema() {
 	await Reading.createCompressedReadingsFunction();
 	await Reading.createBarchartReadingsFunction();
 	await User.createTable();
+	await Baseline.createTable();
 	await db.none(sqlFile('reading/create_function_get_compressed_readings.sql'));
 }
 

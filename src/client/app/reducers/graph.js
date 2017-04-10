@@ -22,6 +22,7 @@ const defaultState = {
 	barDuration: moment.duration(1, 'month'),
 	chartToRender: chartTypes.line,
 	barStacking: false
+	baselines: [],
 };
 
 /**
@@ -34,7 +35,8 @@ export default function graph(state = defaultState, action) {
 		case graphActions.UPDATE_SELECTED_METERS:
 			return {
 				...state,
-				selectedMeters: action.meterIDs
+				selectedMeters: action.meterIDs,
+				baselines: action.baselines
 			};
 		case graphActions.UPDATE_BAR_DURATION:
 			return {

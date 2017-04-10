@@ -19,6 +19,7 @@ import * as graphActions from '../actions/graph';
  */
 const defaultState = {
 	selectedMeters: [],
+	baselines: [],
 	timeInterval: TimeInterval.unbounded()
 };
 
@@ -33,7 +34,8 @@ export default function graph(state = defaultState, action) {
 		case graphActions.UPDATE_SELECTED_METERS:
 			return {
 				...state,
-				selectedMeters: action.meterIDs
+				selectedMeters: action.meterIDs,
+				baselines: action.baselines
 			};
 		case graphActions.SET_GRAPH_ZOOM:
 			return {

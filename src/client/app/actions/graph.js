@@ -10,7 +10,25 @@ import TimeInterval from '../../../common/TimeInterval';
 
 export const UPDATE_SELECTED_METERS = 'UPDATE_SELECTED_METERS';
 export const SET_GRAPH_ZOOM = 'CHANGE_GRAPH_ZOOM';
+export const REQUEST_BASELINE_DATA = 'REQUEST_BASELINE_DATA';
+export const RECEIVE_BASELINE_DATA = 'RECEIVE_BASELINE_DATA';
 
+export function requestBaselineData(meters) {
+	return { type: REQUEST_BASELINE_DATA, meters };
+}
+
+export function receiveBaselineData(meters, baselines) {
+	return { type: RECEIVE_BASELINE_DATA, meters, baselines };
+}
+
+
+function fetchBaselineData(meters) {
+	return dispatch => {
+		dispatch(requestBaselineData(meters);
+		const stringifiedMeterIDs = meters.join(',');
+	return axios.get('/api/baseline/values/${stringifiedMeterIDs}').then(response => dispatch(receiveBaselineData(meters, response.data)));
+	};
+}
 
 export function updateSelectedMeters(meterIDs) {
 	return { type: UPDATE_SELECTED_METERS, meterIDs };

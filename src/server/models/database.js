@@ -53,12 +53,14 @@ async function createSchema() {
 	const Meter = require('./Meter');
 	const Reading = require('./Reading');
 	const User = require('./User');
+	const Baseline = require('./Baseline');
 	/* eslint-enable global-require */
 	await Meter.createMeterTypesEnum();
 	await Meter.createTable();
 	await Reading.createTable();
 	await Reading.createCompressedReadingsFunction();
 	await User.createTable();
+	await Baseline.createTable();
 	await db.none(sqlFile('reading/create_function_get_compressed_readings.sql'));
 }
 

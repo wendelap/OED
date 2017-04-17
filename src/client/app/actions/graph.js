@@ -46,7 +46,7 @@ export function updateBarDuration(barDuration) {
 
 function fetchBaselineData(meters) {
 	return dispatch => {
-		dispatch(requestBaselineData(meters);
+		dispatch(requestBaselineData(meters));
 		const stringifiedMeterIDs = meters.join(',');
 	return axios.get('/api/baseline/values/${stringifiedMeterIDs}').then(response => dispatch(receiveBaselineData(meters, response.data)));
 	};
@@ -68,6 +68,8 @@ export function changeSelectedMeters(meterIDs) {
 			dispatch2(fetchNeededLineReadings(getState().graph.timeInterval));
 			dispatch2(fetchNeededBarReadings(getState().graph.timeInterval));
 		});
+		dispatch(fetchNeededReadings(meterIDs, state().graph.timeInterval));
+		dispatch(fetchBaselineData(meterIDs));
 		return Promise.resolve();
 	};
 }

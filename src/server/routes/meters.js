@@ -7,6 +7,7 @@ const _ = require('lodash');
 const Meter = require('../models/Meter');
 const Reading = require('../models/Reading');
 const TimeInterval = require('../../common/TimeInterval');
+const Baseline = require('../models/Baseline');
 
 const router = express.Router();
 
@@ -71,5 +72,6 @@ router.get('/readings/:meter_ids', async (req, res) => {
 		console.error(`Error while performing GET readings for meters ${meterIDs} with time interval ${timeInterval}: ${err}`);
 	}
 });
+
 
 module.exports = router;

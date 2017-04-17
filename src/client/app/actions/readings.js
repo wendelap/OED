@@ -9,6 +9,17 @@ import axios from 'axios';
 export const REQUEST_MANY_READINGS = 'REQUEST_MANY_READINGS';
 export const RECEIVE_MANY_READINGS = 'RECEIVE_MANY_READINGS';
 
+export const REQUEST_BASELINE_DATA = 'REQUEST_BASELINE_DATA';
+export const RECEIVE_BASELINE_DATA = 'RECEIVE_BASELINE_DATA';
+
+export function requestBaselineData(meters) {
+	return { type: REQUEST_BASELINE_DATA, meters };
+}
+
+export function receiveBaselineData(meters, baselines) {
+	return { type: RECEIVE_BASELINE_DATA, meters, baselines };
+}
+
 
 /**
  * @param {State} state
@@ -46,6 +57,7 @@ function fetchManyReadings(meterIDs, timeInterval) {
 	};
 }
 
+
 /**
  * Fetches readings for the given meterIDs if they are not already fetched or being fetched
  * @param {Array.<int>} meterIDs
@@ -59,6 +71,7 @@ export function fetchNeededReadings(meterIDs, timeInterval) {
 		if (meterIDsToFetch.length > 0) {
 			return dispatch(fetchManyReadings(meterIDsToFetch, timeInterval));
 		}
+		
 		return Promise.resolve();
 	};
 }

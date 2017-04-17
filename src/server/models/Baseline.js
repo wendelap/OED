@@ -33,11 +33,18 @@ static async getByID(id, conn=db) {
 	return Baseline.baselineRow(row);
 }
 
+
+static async getBaselines(meterIDs, conn=db) {
+	const rows = await conn.any(sqlFile('baseline/get_baselines_by_ids.sql'), {meterIDs: meterIDs});
+	return rows.map(Baseline.baselineRow);
+}	
+
 static baselineRow(row) {
 
 	return new Baseline(row.meterID, row.apply_start, row.apply_end, row.calc_start, row.calc_end, row.baseline_value);
 
 }
+
 
 };
 

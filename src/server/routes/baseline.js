@@ -6,7 +6,7 @@ const express = require('express');
 const _ = require('lodash');
 const Meter = require('../models/Meter');
 const Reading = require('../models/Reading');
-const Reading = require('../models/Baseline');
+const Baseline = require('../models/Baseline');
 const TimeInterval = require('../../common/TimeInterval');
 
 const router = express.Router();
@@ -19,3 +19,16 @@ router.get('/value:meter_id', async (req, res) => {
 		console.error(`Error while performing get: ${err}`);
 
 });
+
+router.get('/values/:meter_ids', async (req, res) => {
+	const meterIDs = req.params.meter_ids.split(',').map(s => parseInt(s));
+	console.error("HERE");
+	try {
+		const rawBaselines = await Baseline.getBaselines(meterIDs);
+		res.send(rawBaselines);
+	} catch (err) {
+		console.error("Error while getting baselines for meters ${meterIDs}: ${err}");
+	}
+});
+
+module.exports = router;

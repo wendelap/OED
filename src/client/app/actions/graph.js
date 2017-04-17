@@ -24,7 +24,7 @@ export function receiveBaselineData(meters, baselines) {
 
 function fetchBaselineData(meters) {
 	return dispatch => {
-		dispatch(requestBaselineData(meters);
+		dispatch(requestBaselineData(meters));
 		const stringifiedMeterIDs = meters.join(',');
 	return axios.get('/api/baseline/values/${stringifiedMeterIDs}').then(response => dispatch(receiveBaselineData(meters, response.data)));
 	};
@@ -38,6 +38,7 @@ export function changeSelectedMeters(meterIDs) {
 	return (dispatch, state) => {
 		dispatch(updateSelectedMeters(meterIDs));
 		dispatch(fetchNeededReadings(meterIDs, state().graph.timeInterval));
+		dispatch(fetchBaselineData(meterIDs));
 		return Promise.resolve();
 	};
 }

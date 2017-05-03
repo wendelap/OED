@@ -10,9 +10,9 @@ const sqlFile = database.sqlFile;
 
 class Baseline {
 
-constructor(meterID, apply_start, apply_end, calc_start, calc_end, baseline_value)
+constructor(meter_id, apply_start, apply_end, calc_start, calc_end, baseline_value)
 {
-	this.meterID = meterid;
+	this.meter_id = meter_id;
 	this.apply_start=apply_start;
 	this.apply_end = apply_end;
 	this.calc_start = calc_start;
@@ -34,14 +34,26 @@ static async getByID(id, conn=db) {
 }
 
 
-static async getBaselines(meterIDs, conn=db) {
-	const rows = await conn.any(sqlFile('baseline/get_baselines_by_ids.sql'), {meterIDs: meterIDs});
+static async getBaselines(conn=db) {
+	const rows = await conn.any(sqlFile('baseline/get_baselines_by_ids.sql'));
 	return rows.map(Baseline.baselineRow);
+}
+
+static async newBaseline(details, conn = db) {
+	//console.error(details);
+	//console.error(details.baselineInfo);
+	await conn.none(sqlFile('baseline/new_baseline.sql'), details);
+}
+
+static async getAverage(constraint, conn=db) {
+	console.error(constraint);
+	const value = await conn.one(sqlFile('baseline/get_average_reading.sql'), constraint);
+	return value;
 }	
 
 static baselineRow(row) {
 
-	return new Baseline(row.meterID, row.apply_start, row.apply_end, row.calc_start, row.calc_end, row.baseline_value);
+	return new Baseline(row.meter_id, row.apply_start, row.apply_end, row.calc_start, row.calc_end, row.baseline_value);
 
 }
 

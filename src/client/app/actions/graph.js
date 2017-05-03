@@ -4,6 +4,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import axios from 'axios';
+
 import { fetchNeededLineReadings } from './lineReadings';
 import { fetchNeededBarReadings } from './barReadings';
 
@@ -12,8 +14,8 @@ export const UPDATE_BAR_DURATION = 'UPDATE_BAR_DURATION';
 export const CHANGE_CHART_TO_RENDER = 'CHANGE_CHART_TO_RENDER';
 export const CHANGE_BAR_STACKING = 'CHANGE_BAR_STACKING';
 export const CHANGE_GRAPH_ZOOM = 'CHANGE_GRAPH_ZOOM';
-export const REQUEST_BASELINE_DATA = 'REQUEST_BASELINE_DATA';
-export const RECEIVE_BASELINE_DATA = 'RECEIVE_BASELINE_DATA';
+export const ADD_NEW_BASELINE = 'ADD_NEW_BASELINE';
+
 
 /**
  * @param {string} chartType is either chartTypes.line or chartTypes.bar
@@ -25,14 +27,6 @@ export function changeChartToRender(chartType) {
 
 export function changeBarStacking() {
 	return { type: CHANGE_BAR_STACKING };
-
-
-export function requestBaselineData(meters) {
-	return { type: REQUEST_BASELINE_DATA, meters };
-}
-
-export function receiveBaselineData(meters, baselines) {
-	return { type: RECEIVE_BASELINE_DATA, meters, baselines };
 }
 
 export function updateSelectedMeters(meterIDs) {
@@ -43,12 +37,43 @@ export function updateBarDuration(barDuration) {
 	return { type: UPDATE_BAR_DURATION, barDuration };
 }
 
+export function addNewBaseline(baselineInfo) {
+	return { type: ADD_NEW_BASELINE, baselineInfo };
+}
 
-function fetchBaselineData(meters) {
-	return dispatch => {
-		dispatch(requestBaselineData(meters));
-		const stringifiedMeterIDs = meters.join(',');
-	return axios.get('/api/baseline/values/${stringifiedMeterIDs}').then(response => dispatch(receiveBaselineData(meters, response.data)));
+function buildNewBaseline(state) {
+	var newBaseline = {};
+	newBaseline['meter_id'] = state.graph.selectedMeters[0];
+	newBaseline['apply_start'] = '1980-01-01';
+	newBaseline['apply_end'] = '2020-01-01';
+	newBaseline['calc_start'] = state.graph.timeInterval.startTimestamp;
+	newBaseline['calc_end'] = state.graph.timeInterval.endTimestamp;
+	//newBaseline['baseline_value'] = average.avg;
+	return newBaseline;
+}
+
+export function newBaseline(date) {
+	return (dispatch, getState) => {
+		date['meterID'] = getState().graph.selectedMeters[0];
+		const baselineInfo = buildNewBaseline(getState());
+		const toSend = {'baselineInfo': baselineInfo, 'date': date};
+		dispatch(addNewBaseline(date,));
+		return axios.post(`/api/baseline/newBaseline/`, 
+			{ toSend }
+		).then(function (response) {
+			console.log(response);
+		});
+	};
+}
+
+export function something(date) {
+	return (dispatch, getState) => {
+		date['meterID'] = getState().graph.selectedMeters[0];
+		return axios.post(`/api/baseline/average/`, 
+			{ date }
+		).then( function (response) {
+			createBaseline(response.data);
+		});
 	};
 }
 
@@ -68,8 +93,6 @@ export function changeSelectedMeters(meterIDs) {
 			dispatch2(fetchNeededLineReadings(getState().graph.timeInterval));
 			dispatch2(fetchNeededBarReadings(getState().graph.timeInterval));
 		});
-		dispatch(fetchNeededReadings(meterIDs, state().graph.timeInterval));
-		dispatch(fetchBaselineData(meterIDs));
 		return Promise.resolve();
 	};
 }

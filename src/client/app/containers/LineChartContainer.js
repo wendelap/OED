@@ -20,13 +20,22 @@ function mapStateToProps(state) {
 
 	for (const meterID of state.graph.selectedMeters) {
 		const readingsData = state.readings.line.byMeterID[meterID][timeInterval];
+		const color = graphColors.getColor();
 		if (readingsData !== undefined && !readingsData.isFetching) {
 			data.datasets.push({
 				label: state.meters.byMeterID[meterID].name,
 				data: readingsData.readings.map(arr => ({ x: arr[0], y: arr[1].toFixed(2) })),
 				fill: false,
-				borderColor: graphColors.getColor()
+				borderColor: color
 			});
+			if (state.meters.baselines.hasOwnProperty(meterID)) {
+				data.datasets.push({
+					label: state.meters.byMeterID[meterID].name+' Baseline',
+					data: readingsData.readings.map(arr => ({ x: arr[0], y: state.meters.baselines[meterID]['baseline_value'] })),
+					fill: false,
+					borderColor: color
+				});
+		}
 		}
 	}
 

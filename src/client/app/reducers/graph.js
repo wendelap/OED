@@ -21,8 +21,8 @@ const defaultState = {
 	timeInterval: TimeInterval.unbounded(),
 	barDuration: moment.duration(1, 'month'),
 	chartToRender: chartTypes.line,
-	barStacking: false
-	baselines: [],
+	barStacking: false,
+	baselineDate: {}
 };
 
 /**
@@ -36,7 +36,6 @@ export default function graph(state = defaultState, action) {
 			return {
 				...state,
 				selectedMeters: action.meterIDs,
-				baselines: action.baselines
 			};
 		case graphActions.UPDATE_BAR_DURATION:
 			return {

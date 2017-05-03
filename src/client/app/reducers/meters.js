@@ -15,11 +15,12 @@ import * as metersActions from '../actions/meters';
 
 const defaultState = {
 	isFetching: false,
-	byMeterID: {}
+	byMeterID: {},
+	baselines: {}
 };
 
 /**
- * @param {State~Meters} state
+ * @param {State~Meters} stateL
  * @param action
  * @return {State~Meters}
  */
@@ -36,6 +37,16 @@ export default function meters(state = defaultState, action) {
 				isFetching: false,
 				byMeterID: _.keyBy(action.data, meter => meter.id)
 			};
+		case metersActions.REQUEST_BASELINE_DATA:
+			return {
+				...state
+			};	
+		case metersActions.RECEIVE_BASELINE_DATA:
+			var test = _.keyBy(action.baselines, 'meter_id');		
+			return {
+				...state,
+				baselines: _.keyBy(action.baselines, 'meter_id')
+			};			
 		default:
 			return state;
 	}

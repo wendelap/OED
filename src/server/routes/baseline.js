@@ -11,24 +11,46 @@ const TimeInterval = require('../../common/TimeInterval');
 
 const router = express.Router();
 
-router.get('/value:meter_id', async (req, res) => {
-	try {
-		const baseline = await Baseline.getByID(req.params.meter_id);
-		res.send(baseline.baseline_value);
-	} catch (err) {
-		console.error(`Error while performing get: ${err}`);
+//router.get('/value:meter_id', async (req, res) => {
+//	try {
+//		const baseline = await Baseline.getByID(req.params.meter_id);
+//		res.send(baseline.baseline_value);
+//	} catch (err) {
+//		console.error(`Error while performing get: ${err}`);
+//	}
+//});
 
-});
-
-router.get('/values/:meter_ids', async (req, res) => {
-	const meterIDs = req.params.meter_ids.split(',').map(s => parseInt(s));
-	console.error("HERE");
+router.get('/values', async (req, res) => {
 	try {
-		const rawBaselines = await Baseline.getBaselines(meterIDs);
+		const rawBaselines = await Baseline.getBaselines();
 		res.send(rawBaselines);
 	} catch (err) {
-		console.error("Error while getting baselines for meters ${meterIDs}: ${err}");
+		console.error(`Error while getting baselines for meters: ${err}`);
+	}
+});
+
+router.post('/newBaseline', async (req, res) => {
+	console.error(req.body);	
+	try {
+		const average = await Baseline.getAverage(req.body.toSend.date);		
+		req.body.toSend.baselineInfo['baseline_value'] = average.avg;		
+		await Baseline.newBaseline(req.body.toSend.baselineInfo);
+		res.send(average);
+	} catch (err) {
+		console.error(`Error while adding baseline: ${err}`);
+	}
+});
+
+router.post('/average', async (req, res) => {
+	try {
+		const average = await Baseline.getAverage(req.body);
+		res.send(average);
+	} catch (err) {
+		console.error(`Error while calculating average: ${err}`);
 	}
 });
 
 module.exports = router;
+
+
+

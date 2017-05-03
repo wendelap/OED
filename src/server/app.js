@@ -12,6 +12,7 @@ const users = require('./routes/users');
 const readings = require('./routes/readings');
 const meters = require('./routes/meters');
 const login = require('./routes/login');
+const baseline = require('./routes/baseline');
 const verification = require('./routes/verification');
 
 const app = express();
@@ -28,6 +29,7 @@ app.use('/api/meters', meters);
 app.use('/api/readings', readings);
 app.use('/api/login', login);
 app.use('/api/verification', verification);
+app.use('/api/baseline', baseline);
 
 app.get('*', (req, res) => {
 	res.sendFile(path.resolve(__dirname, '..', 'client', 'index.html'));

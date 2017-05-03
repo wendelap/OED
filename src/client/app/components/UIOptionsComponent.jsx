@@ -20,8 +20,15 @@ export default class UIOptionsComponent extends React.Component {
 		this.handleBarDurationChangeComplete = this.handleBarDurationChangeComplete.bind(this);
 		this.handleChangeChartType = this.handleChangeChartType.bind(this);
 		this.handleChangeBarStacking = this.handleChangeBarStacking.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleDateStartChange = this.handleDateStartChange.bind(this);
+		this.handleDateEndChange = this.handleDateEndChange.bind(this);
 		this.state = {
-			barDuration: 30 // barDuration in days
+			barDuration: 30, // barDuration in days
+			baselineDate: {
+				start: null,
+				end: null
+			}
 		};
 	}
 
@@ -69,6 +76,20 @@ export default class UIOptionsComponent extends React.Component {
 		this.props.changeBarStacking();
 	}
 
+	handleSubmit(event) {
+		event.preventDefault();
+		this.props.createNewBaseline(this.state.baselineDate);
+		
+	}
+
+	handleDateStartChange(event) {
+		this.setState({ baselineDate: {start: event.target.value, end: this.state.baselineDate.end }});
+	}
+
+	handleDateEndChange(event) {
+		this.setState({ baselineDate: {start: this.state.baselineDate.start, end: event.target.value }});
+	}
+
 	/**
 	 * @returns JSX to create the UI options side-panel (includes dynamic rendering of meter information for selection)
 	 */
@@ -104,6 +125,11 @@ export default class UIOptionsComponent extends React.Component {
 					</div>
 					<p style={labelStyle}>Bar chart interval (days):</p>
 					<Slider min={1} max={365} value={this.state.barDuration} onChange={this.handleBarDurationChange} onChangeComplete={this.handleBarDurationChangeComplete} />
+					<form onSubmit = {this.handleSubmit}>
+					Baseline Period Start: <input type="date" value={this.state.baselineDate.start} onChange={this.handleDateStartChange}/>
+					Baseline Period End: <input type="date" value={this.state.baselineDate.end} onChange={this.handleDateEndChange}/>
+					<input type="submit" value="Submit" />
+					</form>
 				</div>
 			</div>
 		);

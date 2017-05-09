@@ -40,8 +40,6 @@ static async getBaselines(conn=db) {
 }
 
 static async newBaseline(details, conn = db) {
-	//console.error(details);
-	//console.error(details.baselineInfo);
 	await conn.none(sqlFile('baseline/new_baseline.sql'), details);
 }
 
@@ -49,7 +47,7 @@ static async getAverage(constraint, conn=db) {
 	console.error(constraint);
 	const value = await conn.one(sqlFile('baseline/get_average_reading.sql'), constraint);
 	return value;
-}	
+}
 
 static baselineRow(row) {
 

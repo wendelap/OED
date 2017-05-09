@@ -15,6 +15,7 @@ export const CHANGE_CHART_TO_RENDER = 'CHANGE_CHART_TO_RENDER';
 export const CHANGE_BAR_STACKING = 'CHANGE_BAR_STACKING';
 export const CHANGE_GRAPH_ZOOM = 'CHANGE_GRAPH_ZOOM';
 export const ADD_NEW_BASELINE = 'ADD_NEW_BASELINE';
+export const SET_GRAPH_ZOOM = 'CHANGE_GRAPH_ZOOM';
 
 
 /**
@@ -66,16 +67,6 @@ export function newBaseline(date) {
 	};
 }
 
-export function something(date) {
-	return (dispatch, getState) => {
-		date['meterID'] = getState().graph.selectedMeters[0];
-		return axios.post(`/api/baseline/average/`, 
-			{ date }
-		).then( function (response) {
-			createBaseline(response.data);
-		});
-	};
-}
 
 export function changeBarDuration(barDuration) {
 	return (dispatch, getState) => {

@@ -11,14 +11,6 @@ const TimeInterval = require('../../common/TimeInterval');
 
 const router = express.Router();
 
-//router.get('/value:meter_id', async (req, res) => {
-//	try {
-//		const baseline = await Baseline.getByID(req.params.meter_id);
-//		res.send(baseline.baseline_value);
-//	} catch (err) {
-//		console.error(`Error while performing get: ${err}`);
-//	}
-//});
 
 router.get('/values', async (req, res) => {
 	try {
@@ -51,6 +43,3 @@ router.post('/average', async (req, res) => {
 });
 
 module.exports = router;
-
-
-

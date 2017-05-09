@@ -22,7 +22,9 @@ const defaultState = {
 	barDuration: moment.duration(1, 'month'),
 	chartToRender: chartTypes.line,
 	barStacking: false,
-	baselineDate: {}
+	baselineDate: {},
+	timeInterval: TimeInterval.unbounded()
+
 };
 
 /**

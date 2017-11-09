@@ -29,10 +29,14 @@ function mapStateToProps(state) {
 					fill: false,
 					borderColor: getGraphColor(label)
 				});
-				if (state.meters.baselines.hasOwnProperty(meterID)) {
+				if (state.meters.baselines.hasOwnProperty(meterID)) { // todo: replace has own property
 					data.datasets.push({
 						label,
-						data: readingsData.readings.map(arr => ({ x: arr[0], y: state.meters.baselines[meterID]['baseline_value'] })),
+						data: readingsData.readings.map(arr => (
+							{
+								x: arr[0],
+								y: state.meters.baselines.meterID.baseline_value
+							})),
 						fill: false,
 						borderColor: getGraphColor(label)
 					});

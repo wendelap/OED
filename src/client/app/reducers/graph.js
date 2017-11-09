@@ -27,7 +27,6 @@ const defaultState = {
 	chartToRender: chartTypes.line,
 	barStacking: false,
 	baselineDate: {},
-	timeInterval: TimeInterval.unbounded()
 };
 
 /**

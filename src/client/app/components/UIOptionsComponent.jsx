@@ -74,15 +74,14 @@ export default class UIOptionsComponent extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		this.props.createNewBaseline(this.state.baselineDate);
-
 	}
 
 	handleDateStartChange(event) {
-		this.setState({ baselineDate: {start: event.target.value, end: this.state.baselineDate.end }});
+		this.setState({ baselineDate: { start: event.target.value, end: this.state.baselineDate.end } });
 	}
 
 	handleDateEndChange(event) {
-		this.setState({ baselineDate: {start: this.state.baselineDate.start, end: event.target.value }});
+		this.setState({ baselineDate: { start: this.state.baselineDate.start, end: event.target.value } });
 	}
 
 	/**
@@ -105,33 +104,47 @@ export default class UIOptionsComponent extends React.Component {
 		return (
 			<div style={divTopPadding}>
 				<ChartSelectContainer />
-				{ /* Controls specific to the bar chart. */}
+				{/* Controls specific to the bar chart. */}
 				{this.props.chartToRender === chartTypes.compare &&
-					<p style={divBottomPadding}>
-						Note: group data cannot be used with the compare function at this time.
-					</p>
+				<p style={divBottomPadding}>
+					Note: group data cannot be used with the compare function at this time.
+				</p>
 				}
 				<ChartDataSelectContainer />
 
-				{ /* Controls specific to the bar chart. */}
+				{/* Controls specific to the bar chart. */}
 				{this.props.chartToRender === chartTypes.bar &&
-					<div>
-						<div className="checkbox">
-							<label><input type="checkbox" onChange={this.handleChangeBarStacking} />Bar stacking</label>
-						</div>
-						<p style={labelStyle}>Bar chart interval (days):</p>
-						<Slider min={1} max={365} value={this.state.barDuration} onChange={this.handleBarDurationChange} onChangeComplete={this.handleBarDurationChangeComplete} />
+				<div>
+					<div className="checkbox">
+						<label><input type="checkbox" onChange={this.handleChangeBarStacking} />Bar stacking</label>
 					</div>
+					<p style={labelStyle}>Bar chart interval (days):</p>
+					<Slider
+						min={1} max={365} value={this.state.barDuration}
+						onChange={this.handleBarDurationChange}
+						onChangeComplete={this.handleBarDurationChangeComplete}
+					/>
+				</div>
 				}
 
-				{ /* We can't export compare data */ }
+				{/* We can't export compare data */}
 				{this.props.chartToRender !== chartTypes.compare &&
-					<ExportContainer />
+				<ExportContainer />
 				}
 
-				<form onSubmit = {this.handleSubmit}>
-					Baseline Period Start: <input type="date" value={this.state.baselineDate.start} onChange={this.handleDateStartChange}/>
-					Baseline Period End: <input type="date" value={this.state.baselineDate.end} onChange={this.handleDateEndChange}/>
+				<form onSubmit={this.handleSubmit}>
+					Baseline Period Start:
+					<input
+						type="date" value={this.state.baselineDate.start}
+						onChange={this.handleDateStartChange}
+					/>
+
+					Baseline Period End:
+					<input
+						type="date"
+						value={this.state.baselineDate.end}
+						onChange={this.handleDateEndChange}
+					/>
 					<input type="submit" value="Submit" />
 				</form>
 			</div>

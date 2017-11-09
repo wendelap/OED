@@ -104,25 +104,24 @@ export function addNewBaseline(baselineInfo) {
 }
 
 function buildNewBaseline(state) {
-	var newBaseline = {};
-	newBaseline['meter_id'] = state.graph.selectedMeters[0];
-	newBaseline['apply_start'] = '1980-01-01';
-	newBaseline['apply_end'] = '2020-01-01';
-	newBaseline['calc_start'] = state.graph.timeInterval.startTimestamp;
-	newBaseline['calc_end'] = state.graph.timeInterval.endTimestamp;
-	//newBaseline['baseline_value'] = average.avg;
-	return newBaseline;
+	return {
+		meterID: state.graph.selectedMeters[0],
+		applyStart: '1980-01-01',
+		applyEnd: '2020-01-01',
+		calcStart: state.graph.timeInterval.startTimestamp,
+		calcEnd: state.graph.timeInterval.endTimestamp
+	};
 }
 
 export function newBaseline(date) {
 	return (dispatch, getState) => {
-		date['meterID'] = getState().graph.selectedMeters[0];
+		date.meterID = getState().graph.selectedMeters[0];
 		const baselineInfo = buildNewBaseline(getState());
-		const toSend = {'baselineInfo': baselineInfo, 'date': date};
-		dispatch(addNewBaseline(date,));
-		return axios.post(`/api/baseline/newBaseline/`,
+		const toSend = { baselineInfo, date };
+		dispatch(addNewBaseline(date));
+		return axios.post('/api/baseline/newBaseline/',
 			{ toSend }
-		).then(function (response) {
+		).then(response => {
 			console.log(response);
 		});
 	};

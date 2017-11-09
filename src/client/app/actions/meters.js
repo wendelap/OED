@@ -44,6 +44,13 @@ function shouldFetchMetersDetails(state) {
 	return !state.meters.isFetching && state.meters.meters === undefined;
 }
 
+function fetchBaselineData() {
+	return dispatch => {
+		dispatch(requestBaselineData());
+		return axios.get('/api/baseline/values').then(response => dispatch(receiveBaselineData(response.data)));
+	};
+}
+
 export function fetchMetersDetailsIfNeeded() {
 	return (dispatch, getState) => {
 		if (shouldFetchMetersDetails(getState())) {
@@ -51,12 +58,5 @@ export function fetchMetersDetailsIfNeeded() {
 			dispatch(fetchBaselineData());
 		}
 		return Promise.resolve();
-	};
-}
-
-function fetchBaselineData() {
-	return dispatch => {
-		dispatch(requestBaselineData());
-		return axios.get('/api/baseline/values').then(response => dispatch(receiveBaselineData(response.data)));
 	};
 }

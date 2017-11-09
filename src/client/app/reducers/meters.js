@@ -42,7 +42,6 @@ export default function meters(state = defaultState, action) {
 				...state
 			};
 		case metersActions.RECEIVE_BASELINE_DATA:
-			var test = _.keyBy(action.baselines, 'meter_id');
 			return {
 				...state,
 				baselines: _.keyBy(action.baselines, 'meter_id')

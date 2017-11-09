@@ -7,7 +7,7 @@ const Meter = require('../models/Meter');
 const log = require('../log');
 const Reading = require('../models/Reading');
 const TimeInterval = require('../../common/TimeInterval');
-const Baseline = require('../models/Baseline');
+const _ = require('lodash');
 
 const router = express.Router();
 
@@ -57,10 +57,10 @@ router.get('/readings/:meter_ids', async (req, res) => {
 	const timeInterval = TimeInterval.fromString(req.query.timeInterval);
 	try {
 		const rawCompressedReadings = await Reading.getCompressedReadings(meterIDs, timeInterval.startTimestamp, timeInterval.endTimestamp, 100);
-		const formattedCompressedReadings = _.mapValues(rawCompressedReadings, formatReadings);
+		const formattedCompressedReadings = _.mapValues(rawCompressedReadings, formatReadings); // todo
 		res.json(formattedCompressedReadings);
 	} catch (err) {
-		console.error(`Error while performing GET readings for meters ${meterIDs} with time interval ${timeInterval}: ${err}`);
+		log(`Error while performing GET readings for meters ${meterIDs} with time interval ${timeInterval}: ${err}`, 'error');
 	}
 });
 

@@ -25,7 +25,9 @@ const defaultState = {
 	compareTimeInterval: moment().diff(moment().startOf('week'), 'days'),
 	compareDuration: moment.duration(1, 'days'),
 	chartToRender: chartTypes.line,
-	barStacking: false
+	barStacking: false,
+	baselineDate: {},
+	timeInterval: TimeInterval.unbounded()
 };
 
 /**

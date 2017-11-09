@@ -8,6 +8,8 @@ import axios from 'axios';
 
 export const REQUEST_METERS_DETAILS = 'REQUEST_METERS_DETAILS';
 export const RECEIVE_METERS_DETAILS = 'RECEIVE_METERS_DETAILS';
+export const REQUEST_BASELINE_DATA = 'REQUEST_BASELINE_DATA';
+export const RECEIVE_BASELINE_DATA = 'RECEIVE_BASELINE_DATA';
 
 export function requestMetersDetails() {
 	return { type: REQUEST_METERS_DETAILS };
@@ -15,6 +17,14 @@ export function requestMetersDetails() {
 
 export function receiveMetersDetails(data) {
 	return { type: RECEIVE_METERS_DETAILS, data };
+}
+
+export function requestBaselineData() {
+	return { type: REQUEST_BASELINE_DATA };
+}
+
+export function receiveBaselineData(baselines) {
+	return { type: RECEIVE_BASELINE_DATA, baselines };
 }
 
 function fetchMetersDetails() {
@@ -37,8 +47,16 @@ function shouldFetchMetersDetails(state) {
 export function fetchMetersDetailsIfNeeded() {
 	return (dispatch, getState) => {
 		if (shouldFetchMetersDetails(getState())) {
-			return dispatch(fetchMetersDetails());
+			dispatch(fetchMetersDetails());
+			dispatch(fetchBaselineData());
 		}
 		return Promise.resolve();
+	};
+}
+
+function fetchBaselineData() {
+	return dispatch => {
+		dispatch(requestBaselineData());
+		return axios.get('/api/baseline/values').then(response => dispatch(receiveBaselineData(response.data)));
 	};
 }

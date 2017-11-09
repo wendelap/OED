@@ -5,6 +5,9 @@
 const express = require('express');
 const Meter = require('../models/Meter');
 const log = require('../log');
+const Reading = require('../models/Reading');
+const TimeInterval = require('../../common/TimeInterval');
+const Baseline = require('../models/Baseline');
 
 const router = express.Router();
 
@@ -41,5 +44,25 @@ router.get('/:meter_id', async (req, res) => {
 		log(`Error while performing GET specific meter by id query: ${err}`, 'error');
 	}
 });
+
+/**
+ * GET meter readings by meter id
+ * @param {array.<int>} meter_ids
+ * @param {Date} [startDate]
+ * @param {Date} [endDate]
+ */
+router.get('/readings/:meter_ids', async (req, res) => {
+	// We can't do .map(parseInt) here because map would give parseInt a radix value of the current array position.
+	const meterIDs = req.params.meter_ids.split(',').map(s => parseInt(s));
+	const timeInterval = TimeInterval.fromString(req.query.timeInterval);
+	try {
+		const rawCompressedReadings = await Reading.getCompressedReadings(meterIDs, timeInterval.startTimestamp, timeInterval.endTimestamp, 100);
+		const formattedCompressedReadings = _.mapValues(rawCompressedReadings, formatReadings);
+		res.json(formattedCompressedReadings);
+	} catch (err) {
+		console.error(`Error while performing GET readings for meters ${meterIDs} with time interval ${timeInterval}: ${err}`);
+	}
+});
+
 
 module.exports = router;

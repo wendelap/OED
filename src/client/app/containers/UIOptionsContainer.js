@@ -32,7 +32,7 @@ function mapDispatchToProps(dispatch) {
 		selectMeters: newSelectedMeterIDs => dispatch(changeSelectedMeters(newSelectedMeterIDs)),
 		changeDuration: barDuration => dispatch(changeBarDuration(barDuration)),
 		changeBarStacking: () => dispatch(changeBarStacking()),
-		createNewBaseline: baselineDate => dispatch(newBaseline(baselineDate))
+		createNewBaseline: newBaselineInfo => dispatch(newBaseline(newBaselineInfo))
 	};
 }
 

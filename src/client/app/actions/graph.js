@@ -103,23 +103,23 @@ export function addNewBaseline(baselineInfo) {
 	return { type: ADD_NEW_BASELINE, baselineInfo };
 }
 
-function buildNewBaseline(state) {
+function buildNewBaseline(date) {
 	return {
-		meterID: state.graph.selectedMeters[0],
+		meterID: date.meterID, // todo
 		applyStart: '1980-01-01',
 		applyEnd: '2020-01-01',
-		calcStart: state.graph.timeInterval.startTimestamp,
-		calcEnd: state.graph.timeInterval.endTimestamp
+		calcStart: date.start_timestamp, // todo
+		calcEnd: date.end_timestamp // todo
 	};
 }
 
-export function newBaseline(date) {
-	return (dispatch, getState) => {
-		date.meterID = getState().graph.selectedMeters[0];
-		const baselineInfo = buildNewBaseline(getState());
-		const toSend = { baselineInfo, date };
-		dispatch(addNewBaseline(date));
-		return axios.post('/api/baseline/newBaseline/',
+export function newBaseline(newBaselineInfo) {
+	console.log(newBaselineInfo); // newBaseLineInfo: { start: "2017-11-01", end: "2017-11-08", meterID: 1 }
+	return dispatch => {
+		const baselineInfo = buildNewBaseline(newBaselineInfo);
+		const toSend = { baselineInfo, date: newBaselineInfo };
+		dispatch(addNewBaseline(newBaselineInfo));
+		return axios.post('/api/baseline/new',
 			{ toSend }
 		).then(response => {
 			console.log(response);

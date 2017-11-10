@@ -44,7 +44,7 @@ export default function meters(state = defaultState, action) {
 		case metersActions.RECEIVE_BASELINE_DATA:
 			return {
 				...state,
-				baselines: _.keyBy(action.baselines, 'meter_id')
+				baselines: _.keyBy(action.baselines, 'meterID')
 			};
 		default:
 			return state;

@@ -12,27 +12,33 @@ const router = express.Router();
 
 router.get('/values', async (req, res) => {
 	try {
-		const rawBaselines = await Baseline.getBaselines();
+		const rawBaselines = await Baseline.getAllBaselines();
 		res.send(rawBaselines);
 	} catch (err) {
 		log(`Error while getting baselines for meters: ${err}`, 'error');
 	}
 });
 
-router.post('/newBaseline', async (req, res) => {
-	console.error(req.body);
+router.post('/new', async (req, res) => {
+	/* this function doesn't do what a reasonable person would expect --- it lies about when the average was calculated
+	 * todo: Fix that.
+	 */
 	try {
-		const average = await Baseline.getAverage(req.body.toSend.date);
-		req.body.toSend.baselineInfo.baseline_value = average.avg;
+		const average = await Baseline.getAverage(req.body.toSend.date); // date is what the user entered
+		// avg over date range, give it to the weird other info from state
+		req.body.toSend.baselineInfo.baselineValue = average.avg;
+		// make new baseline using avg over user's date, but say it was calculated over the dates that were displayed on the graph at the time
 		await Baseline.newBaseline(req.body.toSend.baselineInfo);
-		res.send(average);
+		res.send(average); // send back avg over user's entered date range
 	} catch (err) {
 		log(`Error while adding baseline: ${err}`, 'error');
 	}
 });
 
+// todo: decide if this route should exist (it's weird!)
 router.post('/average', async (req, res) => {
 	try {
+		// todo: this definitely should not be just forwarding the entire request body
 		const average = await Baseline.getAverage(req.body);
 		res.send(average);
 	} catch (err) {

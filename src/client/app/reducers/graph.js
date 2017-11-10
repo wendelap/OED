@@ -26,7 +26,6 @@ const defaultState = {
 	compareDuration: moment.duration(1, 'days'),
 	chartToRender: chartTypes.line,
 	barStacking: false,
-	baselineDate: {},
 };
 
 /**

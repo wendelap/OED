@@ -27,11 +27,13 @@ export default class UIOptionsComponent extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleDateStartChange = this.handleDateStartChange.bind(this);
 		this.handleDateEndChange = this.handleDateEndChange.bind(this);
+		// todo: this should be in redux state
 		this.state = {
 			barDuration: 30, // barDuration in days
-			baselineDate: {
-				start: null,
-				end: null
+			newBaselineInfo: {
+				meterID: null, // todo: never used at the moment, should be easier once in redux state
+				startTS: '',
+				endTS: ''
 			}
 		};
 	}
@@ -73,15 +75,15 @@ export default class UIOptionsComponent extends React.Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		this.props.createNewBaseline(this.state.baselineDate);
+		this.props.createNewBaseline(this.state.newBaselineInfo);
 	}
 
 	handleDateStartChange(event) {
-		this.setState({ baselineDate: { start: event.target.value, end: this.state.baselineDate.end } });
+		this.setState({ newBaselineInfo: { meterID: this.state.newBaselineInfo.meterID, startTS: event.target.value, endTS: this.state.newBaselineInfo.endTS } });
 	}
 
 	handleDateEndChange(event) {
-		this.setState({ baselineDate: { start: this.state.baselineDate.start, end: event.target.value } });
+		this.setState({ newBaselineInfo: { meterID: this.state.newBaselineInfo.meterID, startTS: this.state.newBaselineInfo.startTS, endTS: event.target.value } });
 	}
 
 	/**
@@ -104,11 +106,11 @@ export default class UIOptionsComponent extends React.Component {
 		return (
 			<div style={divTopPadding}>
 				<ChartSelectContainer />
-				{/* Controls specific to the bar chart. */}
+				{ /* Controls specific to the bar chart. */}
 				{this.props.chartToRender === chartTypes.compare &&
-				<p style={divBottomPadding}>
-					Note: group data cannot be used with the compare function at this time.
-				</p>
+					<p style={divBottomPadding}>
+						Note: group data cannot be used with the compare function at this time.
+					</p>
 				}
 				<ChartDataSelectContainer />
 
@@ -127,7 +129,7 @@ export default class UIOptionsComponent extends React.Component {
 				</div>
 				}
 
-				{/* We can't export compare data */}
+				{/* We can't export compare data -- Don't render export button if looking at compare */}
 				{this.props.chartToRender !== chartTypes.compare &&
 				<ExportContainer />
 				}

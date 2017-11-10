@@ -9,6 +9,8 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import getGraphColor from '../utils/getGraphColor';
 
+const _ = require('lodash');
+
 /**
  * @param {State} state
  */
@@ -29,13 +31,13 @@ function mapStateToProps(state) {
 					fill: false,
 					borderColor: getGraphColor(label)
 				});
-				if (state.meters.baselines.hasOwnProperty(meterID)) { // todo: replace has own property
+				if (_.has(state.meters.baselines, meterID)) {
 					data.datasets.push({
 						label,
 						data: readingsData.readings.map(arr => (
 							{
 								x: arr[0],
-								y: state.meters.baselines.meterID.baseline_value
+								y: state.meters.baselines.meterID.baselineValue
 							})),
 						fill: false,
 						borderColor: getGraphColor(label)

@@ -3,4 +3,4 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-SELECT apply_start, apply_end, calc_start, calc_end, baseline_value FROM baseline WHERE meter_id=${id};
+SELECT apply_start, apply_end, calc_start, calc_end, baseline_value FROM baseline WHERE meter_id=${meter_id};

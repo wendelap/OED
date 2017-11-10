@@ -4,4 +4,4 @@
  */
 
 INSERT INTO baseline (meter_id, apply_start, apply_end, calc_start, calc_end, baseline_value)
-VALUES (${meter_id}, '1980-01-01', '2020-01-01', ${calc_start}, ${calc_end}, ${baseline_value});
+VALUES (${meter_id}, ${apply_start}, ${apply_end}, ${calc_start}, ${calc_end}, ${baseline_value});

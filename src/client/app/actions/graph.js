@@ -4,7 +4,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import axios from 'axios';
 
 import { fetchNeededLineReadings } from './lineReadings';
 import { fetchNeededBarReadings, fetchNeededCompareReadings } from './barReadings';
@@ -15,7 +14,6 @@ export const UPDATE_BAR_DURATION = 'UPDATE_BAR_DURATION';
 export const CHANGE_CHART_TO_RENDER = 'CHANGE_CHART_TO_RENDER';
 export const CHANGE_BAR_STACKING = 'CHANGE_BAR_STACKING';
 export const CHANGE_GRAPH_ZOOM = 'CHANGE_GRAPH_ZOOM';
-export const ADD_NEW_BASELINE = 'ADD_NEW_BASELINE';
 export const SET_GRAPH_ZOOM = 'CHANGE_GRAPH_ZOOM';
 
 /**
@@ -99,30 +97,3 @@ export function changeGraphZoomIfNeeded(timeInterval) {
 	};
 }
 
-export function addNewBaseline(baselineInfo) {
-	return { type: ADD_NEW_BASELINE, baselineInfo };
-}
-
-function buildNewBaseline(date) {
-	return {
-		meterID: date.meterID, // todo
-		applyStart: '1980-01-01',
-		applyEnd: '2020-01-01',
-		calcStart: date.start_timestamp, // todo
-		calcEnd: date.end_timestamp // todo
-	};
-}
-
-export function newBaseline(newBaselineInfo) {
-	console.log(newBaselineInfo); // newBaseLineInfo: { start: "2017-11-01", end: "2017-11-08", meterID: 1 }
-	return dispatch => {
-		const baselineInfo = buildNewBaseline(newBaselineInfo);
-		const toSend = { baselineInfo, date: newBaselineInfo };
-		dispatch(addNewBaseline(newBaselineInfo));
-		return axios.post('/api/baseline/new',
-			{ toSend }
-		).then(response => {
-			console.log(response);
-		});
-	};
-}

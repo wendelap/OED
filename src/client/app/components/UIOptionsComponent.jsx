@@ -133,22 +133,6 @@ export default class UIOptionsComponent extends React.Component {
 				{this.props.chartToRender !== chartTypes.compare &&
 				<ExportContainer />
 				}
-
-				<form onSubmit={this.handleSubmit}>
-					Baseline Period Start:
-					<input
-						type="date" value={this.state.baselineDate.start}
-						onChange={this.handleDateStartChange}
-					/>
-
-					Baseline Period End:
-					<input
-						type="date"
-						value={this.state.baselineDate.end}
-						onChange={this.handleDateEndChange}
-					/>
-					<input type="submit" value="Submit" />
-				</form>
 			</div>
 		);
 	}

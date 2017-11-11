@@ -12,6 +12,7 @@ import { chartTypes } from '../reducers/graph';
 import ExportContainer from '../containers/ExportContainer';
 import ChartSelectContainer from '../containers/ChartSelectContainer';
 import ChartDataSelectContainer from '../containers/ChartDataSelectContainer';
+import BaselineCreationContainer from '../containers/BaselineCreationContainer';
 
 export default class UIOptionsComponent extends React.Component {
 	/**
@@ -79,11 +80,23 @@ export default class UIOptionsComponent extends React.Component {
 	}
 
 	handleDateStartChange(event) {
-		this.setState({ newBaselineInfo: { meterID: this.state.newBaselineInfo.meterID, startTS: event.target.value, endTS: this.state.newBaselineInfo.endTS } });
+		this.setState({
+			newBaselineInfo: {
+				meterID: this.state.newBaselineInfo.meterID,
+				startTS: event.target.value,
+				endTS: this.state.newBaselineInfo.endTS
+			}
+		});
 	}
 
 	handleDateEndChange(event) {
-		this.setState({ newBaselineInfo: { meterID: this.state.newBaselineInfo.meterID, startTS: this.state.newBaselineInfo.startTS, endTS: event.target.value } });
+		this.setState({
+			newBaselineInfo: {
+				meterID: this.state.newBaselineInfo.meterID,
+				startTS: this.state.newBaselineInfo.startTS,
+				endTS: event.target.value
+			}
+		});
 	}
 
 	/**
@@ -106,11 +119,11 @@ export default class UIOptionsComponent extends React.Component {
 		return (
 			<div style={divTopPadding}>
 				<ChartSelectContainer />
-				{ /* Controls specific to the bar chart. */}
+				{/* Controls specific to the bar chart. */}
 				{this.props.chartToRender === chartTypes.compare &&
-					<p style={divBottomPadding}>
-						Note: group data cannot be used with the compare function at this time.
-					</p>
+				<p style={divBottomPadding}>
+					Note: group data cannot be used with the compare function at this time.
+				</p>
 				}
 				<ChartDataSelectContainer />
 
@@ -133,6 +146,9 @@ export default class UIOptionsComponent extends React.Component {
 				{this.props.chartToRender !== chartTypes.compare &&
 				<ExportContainer />
 				}
+
+				<BaselineCreationContainer />
+
 			</div>
 		);
 	}

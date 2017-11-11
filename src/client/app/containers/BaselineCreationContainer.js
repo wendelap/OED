@@ -3,14 +3,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import { connect } from 'react-redux';
-import { newBaseline } from '../actions/baselines';
+import { submitNewBaselineIfNeeded, editNewBaselineCalcStart, editNewBaselineCalcEnd } from '../actions/baselines';
 import BaselineCreationComponent from '../components/BaselineCreationComponent';
 
-
-function mapDispatchToProps(dispatch) {
+function mapStateToProps() {
 	return {
-		createNewBaseline: newBaselineInfo => dispatch(newBaseline(newBaselineInfo))
+		nothing: 'nothing'
 	};
 }
 
-export default connect(mapDispatchToProps)(BaselineCreationComponent);
+function mapDispatchToProps(dispatch) {
+	return {
+		editCalcStart: timestamp => dispatch(editNewBaselineCalcStart(timestamp)),
+		editCalcEnd: timestamp => dispatch(editNewBaselineCalcEnd(timestamp)),
+		submitNewBaseline: () => dispatch(submitNewBaselineIfNeeded())
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BaselineCreationComponent);

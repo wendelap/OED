@@ -11,6 +11,7 @@ import barReadings from './barReadings';
 import graph from './graph';
 import groups from './groups';
 import notifications from './notifications';
+import baselines from './baselines';
 
 /**
  * @typedef {Object} State
@@ -27,4 +28,4 @@ import notifications from './notifications';
  * @param action
  * @return {State}
  */
-export default combineReducers({ meters, readings: combineReducers({ line: lineReadings, bar: barReadings }), graph, groups, notifications });
+export default combineReducers({ meters, readings: combineReducers({ line: lineReadings, bar: barReadings }), graph, groups, notifications, baselines });

@@ -5,33 +5,53 @@
 
 import axios from 'axios';
 
-export const ADD_NEW_BASELINE = 'ADD_NEW_BASELINE';
+export const CREATE_NEW_BASELINE = 'CREATE_NEW_BASELINE';
+export const MARK_NEW_BASELINE_SUBMITTED = 'MARK_NEW_BASELINE_SUBMITTED';
+export const MARK_NEW_BASELINE_NOT_SUBMITTED = 'MARK_NEW_BASELINE_NOT_SUBMITTED';
+export const EDIT_NEW_BASELINE_CALC_START = 'EDIT_NEW_BASELINE_CALC_START';
+export const EDIT_NEW_BASELINE_CALC_END = 'EDIT_NEW_BASELINE_CALC_END';
 
-
-export function addNewBaseline(baselineInfo) {
-	return { type: ADD_NEW_BASELINE, baselineInfo };
+function markNewBaselineSubmitted() {
+	return { type: MARK_NEW_BASELINE_SUBMITTED };
 }
 
-function buildNewBaseline(date) {
-	return {
-		meterID: date.meterID, // todo
-		applyStart: '1980-01-01',
-		applyEnd: '2020-01-01',
-		calcStart: date.start_timestamp, // todo
-		calcEnd: date.end_timestamp // todo
-	};
+function markNewBaselineNotSubmitted() {
+	return { type: MARK_NEW_BASELINE_NOT_SUBMITTED };
 }
 
-export function newBaseline(newBaselineInfo) {
-	console.log(newBaselineInfo); // newBaseLineInfo: { start: "2017-11-01", end: "2017-11-08", meterID: 1 }
-	return dispatch => {
-		const baselineInfo = buildNewBaseline(newBaselineInfo);
-		const toSend = { baselineInfo, date: newBaselineInfo };
-		dispatch(addNewBaseline(newBaselineInfo));
-		return axios.post('/api/baseline/new',
-			{ toSend }
-		).then(response => {
-			console.log(response);
-		});
+export function editNewBaselineCalcStart(timestamp) {
+	return { type: EDIT_NEW_BASELINE_CALC_START, timestamp };
+}
+
+export function editNewBaselineCalcEnd(timestamp) {
+	return { type: EDIT_NEW_BASELINE_CALC_END, timestamp };
+}
+
+function shouldSubmitBaseline(state) {
+	return !state.baselines.newBaselineInfo.submitted;
+}
+
+export function submitNewBaselineIfNeeded() {
+	return (dispatch, getState) => {
+		if (shouldSubmitBaseline(getState())) {
+			const newBaselineInfo = getState().baselines.newBaselineInfo;
+			const params = {
+				meterID: 1, // todo: this is a dummy value
+				calcStart: newBaselineInfo.calcStart,
+				calcEnd: newBaselineInfo.calcEnd,
+				applyStart: '1970-01-01', // todo: this is a dummy value
+				applyEnd: '2020-12-31' // todo: this is a dummy value
+			};
+			return axios.post('/api/baseline/new', params)
+				.then(response => {
+					console.log(response);
+					dispatch(markNewBaselineSubmitted());
+				})
+				.catch(err => {
+					console.error(err);
+					dispatch(markNewBaselineNotSubmitted());
+				});
+		}
+		return Promise.resolve();
 	};
 }

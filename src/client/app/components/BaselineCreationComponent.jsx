@@ -7,21 +7,41 @@ import React from 'react';
 
 export default class BaselineCreationComponent extends React.Component {
 
+	constructor(props) {
+		super(props);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.editCalcStart = this.editCalcStart.bind(this);
+		this.editCalcEnd = this.editCalcEnd.bind(this);
+	}
+
+	handleSubmit() {
+		this.props.submitNewBaseline();
+	}
+
+	editCalcStart(e) {
+		this.props.editCalcStart(e.target.value);
+	}
+
+	editCalcEnd(e) {
+		this.props.editCalcEnd(e.target.value);
+	}
+
 	render() {
 		return (
 			<div>
 				<form onSubmit={this.handleSubmit}>
 					Baseline Period Start:
 					<input
-						type="date" value={this.state.baselineDate.start}
-						onChange={this.handleDateStartChange}
+						type="date"
+						placeholder=""
+						onChange={this.editCalcStart}
 					/>
 
 					Baseline Period End:
 					<input
 						type="date"
-						value={this.state.baselineDate.end}
-						onChange={this.handleDateEndChange}
+						placeholder=""
+						onChange={this.editCalcEnd}
 					/>
 					<input type="submit" value="Submit" />
 				</form>

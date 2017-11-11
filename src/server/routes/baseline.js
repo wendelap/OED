@@ -20,17 +20,19 @@ router.get('/values', async (req, res) => {
 });
 
 router.post('/new', async (req, res) => {
-	/* this function doesn't do what a reasonable person would expect --- it lies about when the average was calculated
-	 * todo: Fix that.
-	 */
 	try {
-		const average = await Baseline.getAverage(req.body.toSend.date); // date is what the user entered
-		// avg over date range, give it to the weird other info from state
-		req.body.toSend.baselineInfo.baselineValue = average.avg;
-		// make new baseline using avg over user's date, but say it was calculated over the dates that were displayed on the graph at the time
-		await Baseline.newBaseline(req.body.toSend.baselineInfo);
-		res.send(average); // send back avg over user's entered date range
+		const baseline = await new Baseline(
+			req.body.meterID,
+			req.body.applyStart,
+			req.body.applyEnd,
+			req.body.calcStart,
+			req.body.calcEnd
+		);
+		await baseline.getAverage();
+		await baseline.insert();
+		res.sendStatus(200);
 	} catch (err) {
+		res.sendStatus(500);
 		log(`Error while adding baseline: ${err}`, 'error');
 	}
 });

@@ -10,13 +10,12 @@ const sqlFile = database.sqlFile;
 
 class Baseline {
 
-	constructor(meterID, applyStart, applyEnd, calcStart, calcEnd, baselineValue) {
+	constructor(meterID, applyStart, applyEnd, calcStart, calcEnd) {
 		this.meterID = meterID;
 		this.applyStart = applyStart;
 		this.applyEnd = applyEnd;
 		this.calcStart = calcStart;
 		this.calcEnd = calcEnd;
-		this.baselineValue = baselineValue;
 	}
 
 	static createTable() {
@@ -48,9 +47,18 @@ class Baseline {
 		return rows.map(Baseline.mapRow);
 	}
 
-	// todo: decide if this needs to exist
-	static async getAverage(constraint, conn = db) {
-		return await conn.one(sqlFile('baseline/get_average_reading.sql'), constraint);
+	async getAverage(conn = db) {
+		const average = await conn.one(sqlFile('baseline/get_average_reading.sql'), {
+			meter_id: this.meterID,
+			start: this.calcStart,
+			end: this.calcEnd
+		});
+		// average is of the form { avg: '2.7925725' }, hence this line
+		const parsedAvg = parseInt(average.avg);
+		if (isNaN(parsedAvg)) {
+			throw Error(`Returned average reading for baseline could not be parsed as a number ${average}`);
+		}
+		this.baselineValue = parseInt(average.avg);
 	}
 
 }

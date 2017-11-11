@@ -8,15 +8,53 @@ import * as baselinesActions from '../actions/baselines';
 const defaultState = {
 	newBaselineInfo: {
 		meterID: null,
-		startTS: '',
-		endTS: '',
+		calcStart: '',
+		calcEnd: '',
+		submitted: false,
+		dirty: false,
 	}
 };
 
 export default function baselines(state = defaultState, action) {
 	switch (action.type) {
-		case baselinesActions.ADD_NEW_BASELINE:
+		case baselinesActions.CREATE_NEW_BASELINE:
 			return state;
+
+		case baselinesActions.MARK_NEW_BASELINE_SUBMITTED:
+			return {
+				...state,
+				newBaselineInfo: {
+					...state.newBaselineInfo,
+					submitted: true
+				}
+			};
+
+		case baselinesActions.MARK_NEW_BASELINE_NOT_SUBMITTED:
+			return {
+				...state,
+				newBaselineInfo: {
+					...state.newBaselineInfo,
+					submitted: false
+				}
+			};
+
+		case baselinesActions.EDIT_NEW_BASELINE_CALC_START:
+			return {
+				...state,
+				newBaselineInfo: {
+					...state.newBaselineInfo,
+					calcStart: action.timestamp
+				}
+			};
+
+		case baselinesActions.EDIT_NEW_BASELINE_CALC_END:
+			return {
+				...state,
+				newBaselineInfo: {
+					...state.newBaselineInfo,
+					calcEnd: action.timestamp
+				}
+			};
 
 		default:
 			return state;

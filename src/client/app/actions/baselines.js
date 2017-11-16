@@ -6,10 +6,18 @@
 import axios from 'axios';
 
 export const CREATE_NEW_BASELINE = 'CREATE_NEW_BASELINE';
+
 export const MARK_NEW_BASELINE_SUBMITTED = 'MARK_NEW_BASELINE_SUBMITTED';
 export const MARK_NEW_BASELINE_NOT_SUBMITTED = 'MARK_NEW_BASELINE_NOT_SUBMITTED';
+
 export const EDIT_NEW_BASELINE_CALC_START = 'EDIT_NEW_BASELINE_CALC_START';
 export const EDIT_NEW_BASELINE_CALC_END = 'EDIT_NEW_BASELINE_CALC_END';
+
+export const EDIT_NEW_BASELINE_APPLY_START = 'EDIT_NEW_BASELINE_APPLY_START';
+export const EDIT_NEW_BASELINE_APPLY_END = 'EDIT_NEW_BASELINE_APPLY_END';
+
+export const EDIT_NEW_BASELINE_METER_ID = 'EDIT_NEW_BASELINE_METER_ID';
+
 
 function markNewBaselineSubmitted() {
 	return { type: MARK_NEW_BASELINE_SUBMITTED };
@@ -27,20 +35,32 @@ export function editNewBaselineCalcEnd(timestamp) {
 	return { type: EDIT_NEW_BASELINE_CALC_END, timestamp };
 }
 
+export function editNewBaselineApplyStart(timestamp) {
+	return { type: EDIT_NEW_BASELINE_APPLY_START, timestamp };
+}
+
+export function editNewBaselineApplyEnd(timestamp) {
+	return { type: EDIT_NEW_BASELINE_APPLY_END, timestamp };
+}
+
+export function editNewBaselineMeterID(id) {
+	return { type: EDIT_NEW_BASELINE_METER_ID, id: parseInt(id) };
+}
+
 function shouldSubmitBaseline(state) {
-	return !state.baselines.newBaselineInfo.submitted;
+	return !state.baselines.newBaseline.submitted;
 }
 
 export function submitNewBaselineIfNeeded() {
 	return (dispatch, getState) => {
 		if (shouldSubmitBaseline(getState())) {
-			const newBaselineInfo = getState().baselines.newBaselineInfo;
+			const newBaseline = getState().baselines.newBaseline;
 			const params = {
-				meterID: 1, // todo: this is a dummy value
-				calcStart: newBaselineInfo.calcStart,
-				calcEnd: newBaselineInfo.calcEnd,
-				applyStart: '1970-01-01', // todo: this is a dummy value
-				applyEnd: '2020-12-31' // todo: this is a dummy value
+				meterID: newBaseline.meterID,
+				calcStart: newBaseline.calcStart,
+				calcEnd: newBaseline.calcEnd,
+				applyStart: newBaseline.applyStart,
+				applyEnd: newBaseline.applyEnd
 			};
 			return axios.post('/api/baseline/new', params)
 				.then(response => {

@@ -6,10 +6,12 @@ import * as baselinesActions from '../actions/baselines';
 
 
 const defaultState = {
-	newBaselineInfo: {
+	newBaseline: {
 		meterID: null,
 		calcStart: '',
 		calcEnd: '',
+		applyStart: '',
+		applyEnd: '',
 		submitted: false,
 		dirty: false,
 	}
@@ -23,8 +25,8 @@ export default function baselines(state = defaultState, action) {
 		case baselinesActions.MARK_NEW_BASELINE_SUBMITTED:
 			return {
 				...state,
-				newBaselineInfo: {
-					...state.newBaselineInfo,
+				newBaseline: {
+					...state.newBaseline,
 					submitted: true
 				}
 			};
@@ -32,8 +34,8 @@ export default function baselines(state = defaultState, action) {
 		case baselinesActions.MARK_NEW_BASELINE_NOT_SUBMITTED:
 			return {
 				...state,
-				newBaselineInfo: {
-					...state.newBaselineInfo,
+				newBaseline: {
+					...state.newBaseline,
 					submitted: false
 				}
 			};
@@ -41,8 +43,8 @@ export default function baselines(state = defaultState, action) {
 		case baselinesActions.EDIT_NEW_BASELINE_CALC_START:
 			return {
 				...state,
-				newBaselineInfo: {
-					...state.newBaselineInfo,
+				newBaseline: {
+					...state.newBaseline,
 					calcStart: action.timestamp
 				}
 			};
@@ -50,9 +52,36 @@ export default function baselines(state = defaultState, action) {
 		case baselinesActions.EDIT_NEW_BASELINE_CALC_END:
 			return {
 				...state,
-				newBaselineInfo: {
-					...state.newBaselineInfo,
+				newBaseline: {
+					...state.newBaseline,
 					calcEnd: action.timestamp
+				}
+			};
+
+		case baselinesActions.EDIT_NEW_BASELINE_APPLY_START:
+			return {
+				...state,
+				newBaseline: {
+					...state.newBaseline,
+					applyStart: action.timestamp
+				}
+			};
+
+		case baselinesActions.EDIT_NEW_BASELINE_APPLY_END:
+			return {
+				...state,
+				newBaseline: {
+					...state.newBaseline,
+					applyEnd: action.timestamp
+				}
+			};
+
+		case baselinesActions.EDIT_NEW_BASELINE_METER_ID:
+			return {
+				...state,
+				newBaseline: {
+					...state.newBaseline,
+					meterID: action.id
 				}
 			};
 

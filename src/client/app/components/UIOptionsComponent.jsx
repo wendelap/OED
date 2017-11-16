@@ -25,18 +25,6 @@ export default class UIOptionsComponent extends React.Component {
 		this.handleBarDurationChange = this.handleBarDurationChange.bind(this);
 		this.handleBarDurationChangeComplete = this.handleBarDurationChangeComplete.bind(this);
 		this.handleChangeBarStacking = this.handleChangeBarStacking.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.handleDateStartChange = this.handleDateStartChange.bind(this);
-		this.handleDateEndChange = this.handleDateEndChange.bind(this);
-		// todo: this should be in redux state
-		this.state = {
-			barDuration: 30, // barDuration in days
-			newBaselineInfo: {
-				meterID: null, // todo: never used at the moment, should be easier once in redux state
-				startTS: '',
-				endTS: ''
-			}
-		};
 	}
 
 	/**
@@ -72,31 +60,6 @@ export default class UIOptionsComponent extends React.Component {
 
 	handleChangeBarStacking() {
 		this.props.changeBarStacking();
-	}
-
-	handleSubmit(event) {
-		event.preventDefault();
-		this.props.createNewBaseline(this.state.newBaselineInfo);
-	}
-
-	handleDateStartChange(event) {
-		this.setState({
-			newBaselineInfo: {
-				meterID: this.state.newBaselineInfo.meterID,
-				startTS: event.target.value,
-				endTS: this.state.newBaselineInfo.endTS
-			}
-		});
-	}
-
-	handleDateEndChange(event) {
-		this.setState({
-			newBaselineInfo: {
-				meterID: this.state.newBaselineInfo.meterID,
-				startTS: this.state.newBaselineInfo.startTS,
-				endTS: event.target.value
-			}
-		});
 	}
 
 	/**

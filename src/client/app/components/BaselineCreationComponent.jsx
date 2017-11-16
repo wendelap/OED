@@ -12,6 +12,9 @@ export default class BaselineCreationComponent extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.editCalcStart = this.editCalcStart.bind(this);
 		this.editCalcEnd = this.editCalcEnd.bind(this);
+		this.editApplyStart = this.editApplyStart.bind(this);
+		this.editApplyEnd = this.editApplyEnd.bind(this);
+		this.editMeterID = this.editMeterID.bind(this);
 	}
 
 	handleSubmit() {
@@ -26,25 +29,61 @@ export default class BaselineCreationComponent extends React.Component {
 		this.props.editCalcEnd(e.target.value);
 	}
 
+	editApplyStart(e) {
+		this.props.editApplyStart(e.target.value);
+	}
+
+	editApplyEnd(e) {
+		this.props.editApplyEnd(e.target.value);
+	}
+
+	editMeterID(e) {
+		this.props.editMeterID(e.target.value);
+	}
+
 	render() {
+		const someStyle = {
+			marginTop: '40px'
+		};
+		const datePairStyle = {
+			marginBottom: '20px'
+		};
 		return (
-			<div>
-				<form onSubmit={this.handleSubmit}>
-					Baseline Period Start:
+			<div style={someStyle}>
+				Meter ID to baseline:
+				<input
+					type="number"
+					onChange={this.editMeterID}
+				/>
+				<div style={datePairStyle}>
+					Baseline Calculation Period Start:
 					<input
 						type="date"
 						placeholder=""
 						onChange={this.editCalcStart}
 					/>
-
-					Baseline Period End:
+					Baseline Calculation Period End:
 					<input
 						type="date"
 						placeholder=""
 						onChange={this.editCalcEnd}
 					/>
-					<input type="submit" value="Submit" />
-				</form>
+				</div>
+				<div style={datePairStyle}>
+					Baseline Application Period Start:
+					<input
+						type="date"
+						placeholder=""
+						onChange={this.editApplyStart}
+					/>
+					Baseline Application Period End:
+					<input
+						type="date"
+						placeholder=""
+						onChange={this.editApplyEnd}
+					/>
+				</div>
+				<button type="submit" onClick={this.handleSubmit}>Submit</button>
 			</div>
 		);
 	}

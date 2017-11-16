@@ -4,10 +4,10 @@
  */
 
 INSERT INTO baseline (meter_id, apply_range, calc_range, baseline_value)
-
-
 VALUES (${meter_id},
 				tsrange(${apply_start}, ${apply_end}, '[]'),
 				tsrange(${calc_start}, ${calc_end}, '[]'),
-				${baseline_value});
+				(SELECT reading_rate FROM compressed_readings(ARRAY [${meter_id}], ${calc_start}, ${calc_end}, 1)))
+RETURNING baseline_value;
+
 

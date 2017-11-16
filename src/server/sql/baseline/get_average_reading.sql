@@ -3,9 +3,4 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
--- todo: this should be replaced by asking the original compressed readings function for 1 point over the time range
-
-SELECT avg(reading) FROM readings
-WHERE start_timestamp >= ${start}
-			AND end_timestamp <= ${end}
-			AND meter_id = ${meter_id};
+-- todo: Delete this file once sure that it has no use.

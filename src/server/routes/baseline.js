@@ -28,7 +28,6 @@ router.post('/new', async (req, res) => {
 			req.body.calcStart,
 			req.body.calcEnd
 		);
-		await baseline.getAverage();
 		await baseline.insert();
 		res.sendStatus(200);
 	} catch (err) {

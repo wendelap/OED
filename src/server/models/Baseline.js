@@ -4,18 +4,18 @@
  */
 
 const database = require('./database');
+const TimeInterval = require('../../common/TimeInterval');
 
 const db = database.db;
 const sqlFile = database.sqlFile;
 
 class Baseline {
 
-	constructor(meterID, applyStart, applyEnd, calcStart, calcEnd) {
+	constructor(meterID, applyStart, applyEnd, calcStart, calcEnd, baselineValue = null) {
 		this.meterID = meterID;
-		this.applyStart = applyStart;
-		this.applyEnd = applyEnd;
-		this.calcStart = calcStart;
-		this.calcEnd = calcEnd;
+		this.applyRange = new TimeInterval(applyStart, applyEnd);
+		this.calcRange = new TimeInterval(calcStart, calcEnd);
+		this.baselineValue = baselineValue;
 	}
 
 	static createTable() {
@@ -27,38 +27,24 @@ class Baseline {
 	}
 
 	async insert(conn = db) {
-		await conn.none(sqlFile('baseline/new_baseline.sql'), {
+		this.baselineValue = await conn.one(sqlFile('baseline/new_baseline.sql'), {
 			meter_id: this.meterID,
-			apply_start: this.applyStart,
-			apply_end: this.applyEnd,
-			calc_start: this.calcStart,
-			calc_end: this.calcEnd,
-			baseline_value: this.baselineValue
+			apply_start: this.applyRange.startTimestamp,
+			apply_end: this.applyRange.endTimestamp,
+			calc_start: this.calcRange.startTimestamp,
+			calc_end: this.calcRange.endTimestamp
 		});
 	}
 
 	static async getAllForMeterID(meterID, conn = db) {
-		const row = await conn.any(sqlFile('baseline/get_baselines_by_meter_id.sql'), { meter_id: meterID });
-		return Baseline.mapRow(row);
+		const rows = await conn.any(sqlFile('baseline/get_baselines_by_meter_id.sql'), { meter_id: meterID });
+		console.log(rows);
+		return Baseline.mapRow(rows);
 	}
 
 	static async getAllBaselines(conn = db) {
 		const rows = await conn.any(sqlFile('baseline/get_baselines_by_ids.sql'));
 		return rows.map(Baseline.mapRow);
-	}
-
-	async getAverage(conn = db) {
-		const average = await conn.one(sqlFile('baseline/get_average_reading.sql'), {
-			meter_id: this.meterID,
-			start: this.calcStart,
-			end: this.calcEnd
-		});
-		// average is of the form { avg: '2.7925725' }, hence this line
-		const parsedAvg = parseInt(average.avg);
-		if (isNaN(parsedAvg)) {
-			throw Error(`Returned average reading for baseline could not be parsed as a number ${average}`);
-		}
-		this.baselineValue = parseInt(average.avg);
 	}
 
 }

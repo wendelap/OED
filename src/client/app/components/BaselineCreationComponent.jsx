@@ -43,27 +43,40 @@ export default class BaselineCreationComponent extends React.Component {
 
 	render() {
 		const someStyle = {
-			marginTop: '40px'
+			marginTop: '40px',
+			padding: '10px',
+			width: 'fit-content',
+			border: 'solid 1px black'
 		};
 		const datePairStyle = {
-			marginBottom: '20px'
+			marginBottom: '20px',
+			padding: '10px',
+			width: 'fit-content',
+			border: 'solid 1px black'
+		};
+		const inputStyle = {
+			margin: '10px',
+			width: 'unset'
 		};
 		return (
 			<div style={someStyle}>
 				Meter ID to baseline:
 				<input
+					style={inputStyle}
 					type="number"
 					onChange={this.editMeterID}
 				/>
 				<div style={datePairStyle}>
 					Baseline Calculation Period Start:
 					<input
+						style={inputStyle}
 						type="date"
 						placeholder=""
 						onChange={this.editCalcStart}
 					/>
 					Baseline Calculation Period End:
 					<input
+						style={inputStyle}
 						type="date"
 						placeholder=""
 						onChange={this.editCalcEnd}
@@ -72,12 +85,14 @@ export default class BaselineCreationComponent extends React.Component {
 				<div style={datePairStyle}>
 					Baseline Application Period Start:
 					<input
+						style={inputStyle}
 						type="date"
 						placeholder=""
 						onChange={this.editApplyStart}
 					/>
 					Baseline Application Period End:
 					<input
+						style={inputStyle}
 						type="date"
 						placeholder=""
 						onChange={this.editApplyEnd}

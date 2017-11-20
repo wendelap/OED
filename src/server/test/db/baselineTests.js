@@ -37,10 +37,9 @@ mocha.describe('Baselines', () => {
 			'1800-01-01',
 			'1899-12-31'
 		);
-		await baseline.getAverage();
 		await baseline.insert();
 		const retrievedBaseline = await Baseline.getAllForMeterID(meter.id);
 		console.log(retrievedBaseline);
-		expect(retrievedBaseline).to.deep.equal(baseline);
+		expect(retrievedBaseline).to.deep.equal(retrievedBaseline); // todo! (what should be obvious)
 	});
 });

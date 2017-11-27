@@ -13,9 +13,6 @@ import {
 } from '../actions/baselines';
 import BaselineCreationComponent from '../components/BaselineCreationComponent';
 
-function mapStateToProps() {
-	return {};
-}
 
 function mapDispatchToProps(dispatch) {
 	return {
@@ -28,4 +25,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BaselineCreationComponent);
+export default connect(null, mapDispatchToProps)(BaselineCreationComponent);

@@ -18,6 +18,7 @@ export const EDIT_NEW_BASELINE_APPLY_END = 'EDIT_NEW_BASELINE_APPLY_END';
 
 export const EDIT_NEW_BASELINE_METER_ID = 'EDIT_NEW_BASELINE_METER_ID';
 
+export const RECEIVE_ALL_BASELINES = 'RECEIVE_ALL_BASELINES';
 
 function markNewBaselineSubmitted() {
 	return { type: MARK_NEW_BASELINE_SUBMITTED };
@@ -62,7 +63,7 @@ export function submitNewBaselineIfNeeded() {
 				applyStart: newBaseline.applyStart,
 				applyEnd: newBaseline.applyEnd
 			};
-			return axios.post('/api/baseline/new', params)
+			return axios.post('/api/baselines/new', params)
 				.then(response => {
 					console.log(response);
 					dispatch(markNewBaselineSubmitted());
@@ -71,6 +72,27 @@ export function submitNewBaselineIfNeeded() {
 					console.error(err);
 					dispatch(markNewBaselineNotSubmitted());
 				});
+		}
+		return Promise.resolve();
+	};
+}
+
+function shouldFetchAllBaselines(state) {
+	return state.baselines.details === null && !state.baselines.isFetching;
+}
+
+export function receiveAllBaselines(data) {
+	return { type: 'RECEIVE_ALL_BASELINES', data };
+}
+
+export function fetchAllBaselines() {
+	return (dispatch, getState) => {
+		if (shouldFetchAllBaselines(getState())) {
+			return axios.get('api/baselines/')
+				.then(response => {
+					dispatch(receiveAllBaselines(response.data));
+				})
+				.catch(console.error);
 		}
 		return Promise.resolve();
 	};

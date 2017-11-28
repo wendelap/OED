@@ -3,8 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+
 const database = require('./database');
 const TimeInterval = require('../../common/TimeInterval');
+const _ = require('lodash');
 
 const db = database.db;
 const sqlFile = database.sqlFile;
@@ -22,8 +24,15 @@ class Baseline {
 		return db.none(sqlFile('baseline/create_baseline_table.sql'));
 	}
 
+	static formatTSRange(rangeString) {
+		// todo: this is a hack that I intend to replace
+		return _.split(rangeString.substring(1, rangeString.length - 1), ',').map(s => _.trim(s, ' "'));
+	}
+
 	static mapRow(row) {
-		return new Baseline(row.meter_id, row.apply_start, row.apply_end, row.calc_start, row.calc_end, row.baseline_value);
+		const applyRange = Baseline.formatTSRange(row.apply_range);
+		const calcRange = Baseline.formatTSRange(row.calc_range);
+		return new Baseline(row.meter_id, applyRange[0], applyRange[1], calcRange[0], calcRange[1], row.baseline_value);
 	}
 
 	async insert(conn = db) {
@@ -39,12 +48,12 @@ class Baseline {
 	static async getAllForMeterID(meterID, conn = db) {
 		const rows = await conn.any(sqlFile('baseline/get_baselines_by_meter_id.sql'), { meter_id: meterID });
 		console.log(rows);
-		return Baseline.mapRow(rows);
+		return rows.map(row => Baseline.mapRow(row));
 	}
 
 	static async getAllBaselines(conn = db) {
 		const rows = await conn.any(sqlFile('baseline/get_baselines_by_ids.sql'));
-		return rows.map(Baseline.mapRow);
+		return rows.map(row => Baseline.mapRow(row));
 	}
 
 }

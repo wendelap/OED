@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import TimeInterval from '../../../common/TimeInterval';
 import * as baselinesActions from '../actions/baselines';
 
 
@@ -14,7 +15,10 @@ const defaultState = {
 		applyEnd: '',
 		submitted: false,
 		dirty: false,
-	}
+	},
+	details: null,
+	isFetching: false,
+	dirty: true
 };
 
 export default function baselines(state = defaultState, action) {
@@ -84,6 +88,28 @@ export default function baselines(state = defaultState, action) {
 					meterID: action.id
 				}
 			};
+
+		case baselinesActions.RECEIVE_ALL_BASELINES: {
+			const newBaselines = action.data.map(baseline => ({
+				...baseline,
+				applyRange: new TimeInterval(baseline.applyRange.startTimestamp, baseline.applyRange.endTimestamp),
+				calcRange: new TimeInterval(baseline.calcRange.startTimestamp, baseline.calcRange.endTimestamp),
+				readings: [
+					[
+						Math.round(new Date(baseline.applyRange.startTimestamp).getTime()),
+						baseline.baselineValue
+					],
+					[
+						Math.round(new Date(baseline.applyRange.endTimestamp).getTime()),
+						baseline.baselineValue
+					]
+				]
+			}));
+			return {
+				...state,
+				details: newBaselines
+			};
+		}
 
 		default:
 			return state;

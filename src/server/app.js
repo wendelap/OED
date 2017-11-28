@@ -33,7 +33,7 @@ app.use('/api/login', login);
 app.use('/api/groups', groups);
 app.use('/api/verification', verification);
 app.use('/api/version', version);
-app.use('/api/baseline', baseline);
+app.use('/api/baselines', baseline);
 
 app.get('*', (req, res) => {
 	res.sendFile(path.resolve(__dirname, '..', 'client', 'index.html'));

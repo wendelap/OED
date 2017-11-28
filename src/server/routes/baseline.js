@@ -10,12 +10,12 @@ const log = require('../log');
 const router = express.Router();
 
 
-router.get('/values', async (req, res) => {
+router.get('/', async (req, res) => {
 	try {
 		const rawBaselines = await Baseline.getAllBaselines();
-		res.send(rawBaselines);
+		res.json(rawBaselines);
 	} catch (err) {
-		log(`Error while getting baselines for meters: ${err}`, 'error');
+		log(`Error while getting all baselines: ${err}`, 'error');
 	}
 });
 

@@ -4,11 +4,17 @@
 
 import { connect } from 'react-redux';
 import DashboardComponent from '../components/DashboardComponent';
+import { fetchAllBaselines } from '../actions/baselines';
 
 function mapStateToProps(state) {
 	return {
 		chartToRender: state.graph.chartToRender,
 	};
 }
+function mapDispatchToProps(dispatch) {
+	return {
+		fetchAllBaselines: () => dispatch(fetchAllBaselines())
+	};
+}
 
-export default connect(mapStateToProps)(DashboardComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardComponent);

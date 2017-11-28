@@ -8,8 +8,8 @@ import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import getGraphColor from '../utils/getGraphColor';
+import TimeInterval from '../../../common/TimeInterval';
 
-const _ = require('lodash');
 
 /**
  * @param {State} state
@@ -31,17 +31,16 @@ function mapStateToProps(state) {
 					fill: false,
 					borderColor: getGraphColor(label)
 				});
-				if (_.has(state.meters.baselines, meterID)) {
-					data.datasets.push({
-						label,
-						data: readingsData.readings.map(arr => (
-							{
-								x: arr[0],
-								y: state.meters.baselines.meterID.baselineValue
-							})),
-						fill: false,
-						borderColor: getGraphColor(label)
-					});
+				for (const baseline of state.baselines.details) {
+					console.log(baseline);
+					if (baseline.meterID === meterID && baseline.applyRange.contains(new TimeInterval(moment('2017-8-10'), moment()))) {
+						data.datasets.push({
+							label: 'baseline',
+							data: baseline.readings.map(arr => ({ x: arr[0], y: arr[1].toFixed(2) })),
+							fill: false,
+							borderColor: getGraphColor('baseline')
+						});
+					}
 				}
 			}
 		}

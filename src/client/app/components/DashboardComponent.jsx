@@ -15,29 +15,39 @@ defaults.global.plugins.datalabels.display = false;
 /**
  * React component that controls the dashboard
  */
-export default function DashboardComponent(props) {
-	const divPadding = {
-		paddingTop: '35px'
-	};
-	let ChartToRender = '';
-	if (props.chartToRender === chartTypes.line) {
-		ChartToRender = LineChartContainer;
-	} else if (props.chartToRender === chartTypes.compare) {
-		ChartToRender = MultiCompareChartContainer;
-	} else {
-		ChartToRender = BarChartContainer;
+export default class DashboardComponent extends React.Component {
+	constructor(props) {
+		super(props);
 	}
 
-	return (
-		<div className="container-fluid">
-			<div>
-				<div className="col-xs-2 hidden-sm hidden-xs" style={divPadding}>
-					<UIOptionsContainer />
-				</div>
-				<div className="col-xs-10">
-					<ChartToRender />
+	componentWillMount() {
+		this.props.fetchAllBaselines();
+	}
+
+	render() {
+		const divPadding = {
+			paddingTop: '35px'
+		};
+		let ChartToRender = '';
+		if (this.props.chartToRender === chartTypes.line) {
+			ChartToRender = LineChartContainer;
+		} else if (this.props.chartToRender === chartTypes.compare) {
+			ChartToRender = MultiCompareChartContainer;
+		} else {
+			ChartToRender = BarChartContainer;
+		}
+		return (
+			<div className="container-fluid">
+				<div>
+					<div className="col-xs-2 hidden-sm hidden-xs" style={divPadding}>
+						<UIOptionsContainer />
+					</div>
+					<div className="col-xs-10">
+						<ChartToRender />
+					</div>
 				</div>
 			</div>
-		</div>
-	);
+		);
+	}
+
 }

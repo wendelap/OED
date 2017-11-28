@@ -3,4 +3,4 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-SELECT * from baseline;
+SELECT meter_id, apply_range, calc_range, baseline_value from baseline;

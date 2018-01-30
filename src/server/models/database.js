@@ -55,6 +55,7 @@ async function createSchema() {
 	const User = require('./User');
 	const Group = require('./Group');
 	const Baseline = require('./Baseline');
+	const Preferences = require('./Preferences');
 	/* eslint-enable global-require */
 	await Meter.createMeterTypesEnum();
 	await Meter.createTable();
@@ -64,6 +65,8 @@ async function createSchema() {
 	await Reading.createBarchartReadingsFunction();
 	await Reading.createCompressedGroupsBarchartReadingsFunction();
 	await User.createTable();
+	await Preferences.createGraphTypesEnum();
+	await Preferences.createTable();
 	await Group.createTables();
 	await Baseline.createTable();
 	await db.none(sqlFile('reading/create_function_get_compressed_readings.sql'));

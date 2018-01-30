@@ -5,7 +5,7 @@
 import React from 'react';
 import HeaderContainer from '../containers/HeaderContainer';
 import DashboardContainer from '../containers/DashboardContainer';
-
+import FooterComponent from '../components/FooterComponent';
 
 /**
  * Top-level React component that controls the home page
@@ -14,8 +14,9 @@ import DashboardContainer from '../containers/DashboardContainer';
 export default function HomeComponent() {
 	return (
 		<div>
-			<HeaderContainer renderOptionsButton renderLoginButton renderGroupsButton />
+			<HeaderContainer />
 			<DashboardContainer />
+			<FooterComponent />
 		</div>
 	);
 }

@@ -5,7 +5,14 @@
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import UIOptionsComponent from '../components/UIOptionsComponent';
-import { changeSelectedMeters, changeBarDuration, changeBarStacking, newBaseline } from '../actions/graph';
+import {
+	changeSelectedMeters,
+	changeBarDuration,
+	changeBarStacking,
+	changeChartToRender,
+	changeCompareTimeInterval,
+	newBaseline
+} from '../actions/graph';
 import { fetchMetersDetailsIfNeeded } from '../actions/meters';
 
 /**
@@ -22,7 +29,10 @@ function mapStateToProps(state) {
 				value: meterID
 			}
 		)),
-		chartToRender: state.graph.chartToRender
+		chartToRender: state.graph.chartToRender,
+		barDuration: state.graph.barDuration,
+		barStacking: state.graph.barStacking,
+		compareInterval: state.graph.compareTimeInterval
 	};
 }
 
@@ -31,6 +41,8 @@ function mapDispatchToProps(dispatch) {
 		fetchMetersDetailsIfNeeded: () => dispatch(fetchMetersDetailsIfNeeded()),
 		selectMeters: newSelectedMeterIDs => dispatch(changeSelectedMeters(newSelectedMeterIDs)),
 		changeDuration: barDuration => dispatch(changeBarDuration(barDuration)),
+		changeChartType: chartType => dispatch(changeChartToRender(chartType)),
+		changeCompareInterval: (compareInterval, compareDuration) => dispatch(changeCompareTimeInterval(compareInterval, compareDuration)),
 		changeBarStacking: () => dispatch(changeBarStacking()),
 		createNewBaseline: newBaselineInfo => dispatch(newBaseline(newBaselineInfo))
 	};

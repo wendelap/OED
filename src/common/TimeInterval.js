@@ -26,6 +26,18 @@ class TimeInterval {
 	}
 
 	/**
+	 * Returns the duration of the time interval
+	 * @param specifier - Optional parameter, defaults to milliseconds
+	 * @returns {number}
+	 */
+	duration(specifier) {
+		if (specifier) {
+			return this.endTimestamp.diff(this.startTimestamp, specifier);
+		}
+		return this.endTimestamp.diff(this.startTimestamp);
+	}
+
+	/**
 	 * Test if this time interval is contains another.
 	 * Intervals are considered to contain equal intervals.
 	 * @param other

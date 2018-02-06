@@ -5,14 +5,17 @@
 import { connect } from 'react-redux';
 import DashboardComponent from '../components/DashboardComponent';
 import { fetchAllBaselines } from '../actions/baselines';
+import { fetchPreferencesIfNeeded } from '../actions/admin';
 
 function mapStateToProps(state) {
 	return {
 		chartToRender: state.graph.chartToRender,
 	};
 }
+
 function mapDispatchToProps(dispatch) {
 	return {
+		fetchPreferencesIfNeeded: () => dispatch(fetchPreferencesIfNeeded()),
 		fetchAllBaselines: () => dispatch(fetchAllBaselines())
 	};
 }

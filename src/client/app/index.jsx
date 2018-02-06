@@ -7,8 +7,10 @@ import thunkMiddleware from 'redux-thunk';
 import { render } from 'react-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
-import RouteComponent from './components/RouteComponent';
+import 'bootstrap/dist/css/bootstrap.css';
+import RouteContainer from './containers/RouteContainer';
 import reducers from './reducers';
+import './styles/index.css';
 
 // This sets up the redux-devtools extension (if it's installed in the browser).
 // https://github.com/zalmoxisus/redux-devtools-extension
@@ -23,7 +25,7 @@ const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddle
 // Provides the Redux store to all child components
 render(
 	<Provider store={store}>
-		<RouteComponent />
+		<RouteContainer />
 	</Provider>,
 	document.getElementById('root')
 );

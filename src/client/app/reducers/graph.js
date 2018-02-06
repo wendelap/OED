@@ -26,6 +26,7 @@ const defaultState = {
 	compareDuration: moment.duration(1, 'days'),
 	chartToRender: chartTypes.line,
 	barStacking: false,
+	hotlinked: false
 };
 
 /**
@@ -35,6 +36,11 @@ const defaultState = {
  */
 export default function graph(state = defaultState, action) {
 	switch (action.type) {
+		case graphActions.TOGGLE_HOTLINKED:
+			return {
+				...state,
+				hotlinked: !state.hotlinked
+			};
 		case graphActions.UPDATE_SELECTED_METERS:
 			return {
 				...state,

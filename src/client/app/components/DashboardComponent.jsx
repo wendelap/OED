@@ -16,18 +16,12 @@ defaults.global.plugins.datalabels.display = false;
  * React component that controls the dashboard
  */
 export default class DashboardComponent extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
 	componentWillMount() {
+		this.props.fetchPreferencesIfNeeded();
 		this.props.fetchAllBaselines();
 	}
 
 	render() {
-		const divPadding = {
-			paddingTop: '35px'
-		};
 		let ChartToRender = '';
 		if (this.props.chartToRender === chartTypes.line) {
 			ChartToRender = LineChartContainer;
@@ -36,18 +30,18 @@ export default class DashboardComponent extends React.Component {
 		} else {
 			ChartToRender = BarChartContainer;
 		}
+
 		return (
 			<div className="container-fluid">
-				<div>
-					<div className="col-xs-2 hidden-sm hidden-xs" style={divPadding}>
+				<div className="row">
+					<div className="col-2 d-none d-lg-block">
 						<UIOptionsContainer />
 					</div>
-					<div className="col-xs-10">
+					<div className="col-12 col-lg-10">
 						<ChartToRender />
 					</div>
 				</div>
 			</div>
 		);
 	}
-
 }

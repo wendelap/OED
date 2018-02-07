@@ -70,6 +70,7 @@ async function createSchema() {
 	await Group.createTables();
 	await Baseline.createTable();
 	await db.none(sqlFile('reading/create_function_get_compressed_readings.sql'));
+	await db.none(sqlFile('baseline/create_function_get_average_reading.sql'));
 }
 
 /**

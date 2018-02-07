@@ -39,7 +39,6 @@ mocha.describe('Baselines', () => {
 		);
 		await baseline.insert();
 		const retrievedBaseline = await Baseline.getAllForMeterID(meter.id);
-		console.log(retrievedBaseline);
 		expect(retrievedBaseline).to.deep.equal(retrievedBaseline); // todo! (what should be obvious)
 	});
 });

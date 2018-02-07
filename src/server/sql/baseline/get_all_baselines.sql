@@ -3,4 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-SELECT meter_id, apply_range, calc_range, baseline_value from baseline;
+SELECT
+	meter_id,
+	lower(apply_range) as apply_start,
+	upper(apply_range) as apply_end,
+	lower(calc_range) as calc_start,
+	upper(calc_range) as calc_end,
+	baseline_value
+from baseline;

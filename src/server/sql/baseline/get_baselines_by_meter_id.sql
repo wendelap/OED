@@ -4,6 +4,7 @@
  */
 
 SELECT
+	meter_id,
 	lower(apply_range) as apply_start,
 	upper(apply_range) as apply_end,
 	lower(calc_range) as calc_start,

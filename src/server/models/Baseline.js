@@ -29,13 +29,14 @@ class Baseline {
 	}
 
 	async insert(conn = db) {
-		this.baselineValue = await conn.one(sqlFile('baseline/new_baseline.sql'), {
+		const resp = await conn.one(sqlFile('baseline/new_baseline.sql'), {
 			meter_id: this.meterID,
 			apply_start: this.applyRange.startTimestamp,
 			apply_end: this.applyRange.endTimestamp,
 			calc_start: this.calcRange.startTimestamp,
 			calc_end: this.calcRange.endTimestamp
 		});
+		this.baselineValue = resp.baseline_value;
 	}
 
 	static async getAllForMeterID(meterID, conn = db) {

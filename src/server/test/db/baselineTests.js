@@ -18,27 +18,33 @@ const moment = require('moment');
 mocha.describe('Baselines', () => {
 	mocha.beforeEach(recreateDB);
 	mocha.it('can be saved and retrieved', async () => {
-		// Need
-		// a meter in the database
+		// Need a meter in the database
 		const meter = new Meter(undefined, 'Larry', null, false, Meter.type.MAMAC);
 		await meter.insert();
 
 		const reading = new Reading(
 			meter.id,
 			1,
-			moment('1850-01-01'),
-			moment('1850-02-01')
+			moment('1950-01-01'),
+			moment('1950-02-01')
 		);
 		await reading.insert();
+		const applyStart = moment('1970-01-01 00:01:00');
+		const applyEnd = moment('2069-12-31 00:01:00');
+		const calcStart = moment('1950-01-01 00:01:00');
+		const calcEnd = moment('1950-12-31 00:01:00');
+
 		const baseline = new Baseline(
 			meter.id,
-			'1970-01-01',
-			'2069-12-31',
-			'1800-01-01',
-			'1899-12-31'
+			applyStart,
+			applyEnd,
+			calcStart,
+			calcEnd
 		);
 		await baseline.insert();
-		const retrievedBaseline = await Baseline.getAllForMeterID(meter.id);
-		expect(retrievedBaseline).to.deep.equal(retrievedBaseline); // todo! (what should be obvious)
+		const retrievedBaselines = await Baseline.getAllForMeterID(meter.id);
+		// The query returns an array. It should contain one entry
+		expect(retrievedBaselines.length).to.equal(1);
+		expect(retrievedBaselines[0]).to.deep.equal(baseline);
 	});
 });

@@ -6,7 +6,6 @@
 
 const database = require('./database');
 const TimeInterval = require('../../common/TimeInterval');
-const _ = require('lodash');
 
 const db = database.db;
 const sqlFile = database.sqlFile;

@@ -139,51 +139,51 @@ export default class UIOptionsComponent extends React.Component {
 
 				{/* Controls specific to the bar chart */}
 				{this.props.chartToRender === chartTypes.bar &&
-					<div>
-						<div className="checkbox">
-							<label><input type="checkbox" onChange={this.handleChangeBarStacking} checked={this.props.barStacking}/>Bar stacking</label>
-						</div>
-						<p style={labelStyle}>Bar chart interval:</p>
-						<ButtonGroup
-							type="radio"
-							value={this.state.barDuration}
-							style={zIndexFix}
-						>
-							<Button
-								outline={this.state.barDuration !== 1}
-								onClick={() => this.handleBarButton(1)}
-							>
-								Day
-							</Button>
-							<Button
-								outline={this.state.barDuration !== 7}
-								onClick={() => this.handleBarButton(7)}
-							>
-								Week
-							</Button>
-							<Button
-								outline={this.state.barDuration !== 28}
-								onClick={() => this.handleBarButton(28)}
-							>
-								Month
-							</Button>
-						</ButtonGroup>
-						<Button
-							outline={!this.state.showSlider}
-							onClick={this.toggleSlider}
-						>
-							Toggle Custom Slider (days)
-						</Button>
-						{this.state.showSlider &&
-						<Slider
-							min={1} max={365} value={this.state.barDuration} onChange={this.handleBarDurationChange}
-							onChangeComplete={this.handleBarDurationChangeComplete}
-						/>
-						}
+				<div>
+					<div className="checkbox">
+						<label><input type="checkbox" onChange={this.handleChangeBarStacking} checked={this.props.barStacking} />Bar stacking</label>
 					</div>
+					<p style={labelStyle}>Bar chart interval:</p>
+					<ButtonGroup
+						type="radio"
+						value={this.state.barDuration}
+						style={zIndexFix}
+					>
+						<Button
+							outline={this.state.barDuration !== 1}
+							onClick={() => this.handleBarButton(1)}
+						>
+							Day
+						</Button>
+						<Button
+							outline={this.state.barDuration !== 7}
+							onClick={() => this.handleBarButton(7)}
+						>
+							Week
+						</Button>
+						<Button
+							outline={this.state.barDuration !== 28}
+							onClick={() => this.handleBarButton(28)}
+						>
+							Month
+						</Button>
+					</ButtonGroup>
+					<Button
+						outline={!this.state.showSlider}
+						onClick={this.toggleSlider}
+					>
+						Toggle Custom Slider (days)
+					</Button>
+					{this.state.showSlider &&
+					<Slider
+						min={1} max={365} value={this.state.barDuration} onChange={this.handleBarDurationChange}
+						onChangeComplete={this.handleBarDurationChangeComplete}
+					/>
+					}
+				</div>
 
 				}
-				{ /* Controls specific to the compare chart */}
+				{/* Controls specific to the compare chart */}
 				{this.props.chartToRender === chartTypes.compare &&
 				<div>
 					<ButtonGroup
@@ -215,8 +215,8 @@ export default class UIOptionsComponent extends React.Component {
 				{/* We can't export compare data -- Don't render export button if looking at compare */}
 				{this.props.chartToRender !== chartTypes.compare &&
 				<div style={divTopPadding}>
-						<ExportContainer />
-					</div>
+					<ExportContainer />
+				</div>
 				}
 
 				<BaselineCreationContainer />

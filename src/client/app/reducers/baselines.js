@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import * as _ from 'lodash';
 import TimeInterval from '../../../common/TimeInterval';
 import * as baselinesActions from '../actions/baselines';
 
@@ -16,7 +17,7 @@ const defaultState = {
 		submitted: false,
 		dirty: false,
 	},
-	details: null,
+	byMeterID: null,
 	isFetching: false,
 	dirty: true
 };
@@ -90,6 +91,7 @@ export default function baselines(state = defaultState, action) {
 			};
 
 		case baselinesActions.RECEIVE_ALL_BASELINES: {
+			console.log(action.data);
 			const newBaselines = action.data.map(baseline => ({
 				...baseline,
 				applyRange: new TimeInterval(baseline.applyRange.startTimestamp, baseline.applyRange.endTimestamp),
@@ -105,9 +107,28 @@ export default function baselines(state = defaultState, action) {
 					]
 				]
 			}));
+			/*
+			 * newBaselines is a list of baseline objects.
+			 * This next transformation does 2 things:
+			 * 1. Group baseline objects into an object containing arrays of baselines keyed by the meter ID to which they apply
+			 * 2. Turn each baseline object in these arrays into an object keyed by the string representation of its application range
+			 *
+			 * Start: [ {baseline}, {baseline}, ...]
+			 * =(1)=> { id: [ baselines ], id: [ baselines ], ...}
+			 * =(2)=> {
+			 * 			id: { 'applicationRange': {baseline}, ... },
+			 * 			id: { 'applicationRange': {baseline}, ... },
+			 * 			...
+			 * 		}
+			 */
+			const newByMeterID = _.mapValues(
+				_.groupBy(newBaselines, 'meterID'), baselinesOfMeter =>
+					_.keyBy(baselinesOfMeter, baseline => baseline.applyRange.toString()
+				));
+			console.log(newByMeterID);
 			return {
 				...state,
-				details: newBaselines
+				byMeterID: newBaselines
 			};
 		}
 
@@ -115,3 +136,4 @@ export default function baselines(state = defaultState, action) {
 			return state;
 	}
 }
+

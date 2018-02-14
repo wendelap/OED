@@ -78,7 +78,7 @@ export function submitNewBaselineIfNeeded() {
 }
 
 function shouldFetchAllBaselines(state) {
-	return state.baselines.details === null && !state.baselines.isFetching;
+	return state.baselines.byMeterID === null && !state.baselines.isFetching;
 }
 
 export function receiveAllBaselines(data) {
@@ -97,3 +97,4 @@ export function fetchAllBaselines() {
 		return Promise.resolve();
 	};
 }
+

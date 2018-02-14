@@ -31,9 +31,12 @@ function mapStateToProps(state) {
 					fill: false,
 					borderColor: getGraphColor(label)
 				});
-				for (const baseline of state.baselines.details) {
+				// todo: This is the worst remaining hack.
+				for (const baseline of state.baselines.byMeterID) {
 					console.log(baseline);
+					// If the meter of the baseline is being displayed, and the apply range falls into this arbitrary range:
 					if (baseline.meterID === meterID && baseline.applyRange.contains(new TimeInterval(moment('2017-8-10'), moment()))) {
+						// Add this to the datasets
 						data.datasets.push({
 							label: 'baseline',
 							data: baseline.readings.map(arr => ({ x: arr[0], y: arr[1].toFixed(2) })),

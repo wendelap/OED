@@ -18,7 +18,7 @@ export const CHANGE_GRAPH_ZOOM = 'CHANGE_GRAPH_ZOOM';
 export const UPDATE_COMPARE_INTERVAL = 'UPDATE_COMPARE_INTERVAL';
 export const UPDATE_COMPARE_DURATION = 'UPDATE_COMPARE_DURATION';
 export const TOGGLE_HOTLINKED = 'TOGGLE_HOTLINKED';
-
+export const UPDATE_LINE_DISPLAY_INTERVAL = 'UPDATE_LINE_DISPLAY_INTERVAL';
 
 function toggleHotlinked() {
 	return { type: 'TOGGLE_HOTLINKED' };
@@ -150,4 +150,8 @@ export function changeOptionsFromLink(options) {
 	}
 	return dispatch => Promise.all(dispatchFirst.map(dispatch))
 			.then(() => Promise.all(dispatchSecond.map(dispatch)));
+}
+
+export function updateLineDisplayInterval(readingIntervals) {
+	return { type: UPDATE_LINE_DISPLAY_INTERVAL, readingIntervals };
 }

@@ -33,7 +33,7 @@ function mapStateToProps(state) {
 				});
 				// todo: This is the worst remaining hack.
 				for (const baseline of state.baselines.byMeterID) {
-					// console.log(baseline);
+					console.log(baseline);
 					// If the meter of the baseline is being displayed, and the apply range falls into this arbitrary range:
 					if (baseline.meterID === meterID && baseline.applyRange.contains(new TimeInterval(moment('2017-8-10'), moment()))) {
 						// Add this to the datasets

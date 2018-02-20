@@ -21,7 +21,6 @@ const defaultState = {
 	selectedMeters: [],
 	selectedGroups: [],
 	timeInterval: TimeInterval.unbounded(),
-	lineDisplayInterval: TimeInterval.unbounded(),
 	barDuration: moment.duration(28, 'days'),
 	compareTimeInterval: new TimeInterval(moment().startOf('week').subtract(7, 'days'), moment()).toString(),
 	compareDuration: moment.duration(1, 'days'),
@@ -82,17 +81,6 @@ export default function graph(state = defaultState, action) {
 				...state,
 				barStacking: !state.barStacking
 			};
-		case graphActions.UPDATE_LINE_DISPLAY_INTERVAL:
-			console.log(action.readingIntervals);
-			const minStart = _.minBy(action.readingIntervals, interval => moment(interval.minStart));
-			/*
-			 * I want to get an array of meter IDs sorted from earliest to latest start
-			 * And another array of meter IDs sorted from latest to earliest end.
-			 * I want to know which meter ids are being displayed so that I can set the line display interval
-			 * to have the earliest start of any meter being displayed and the latest end of any meter being displayed.
-			 */
-			console.log(minStart);
-
 		default:
 			return state;
 	}

@@ -5,7 +5,6 @@
  */
 
 import axios from 'axios';
-import { updateLineDisplayInterval } from './graph';
 
 export const REQUEST_GROUP_LINE_READINGS = 'REQUEST_GROUP_LINE_READINGS';
 export const RECEIVE_GROUP_LINE_READINGS = 'RECEIVE_GROUP_LINE_READINGS';
@@ -99,11 +98,7 @@ function fetchMeterLineReadings(meterIDs, timeInterval) {
 		const stringifiedIDs = meterIDs.join(',');
 		return axios.get(`/api/readings/line/meters/${stringifiedIDs}`, {
 			params: { timeInterval: timeInterval.toString() }
-		}).then(response => {
-			dispatch(receiveMeterLineReadings(meterIDs, timeInterval, response.data.readings));
-			console.log(response.data.displayRanges);
-			dispatch(updateLineDisplayInterval(response.data.displayRanges));
-		});
+		}).then(response => dispatch(receiveMeterLineReadings(meterIDs, timeInterval, response.data)));
 	};
 }
 

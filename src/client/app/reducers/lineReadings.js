@@ -75,6 +75,7 @@ export default function readings(state = defaultState, action) {
 					...state.byMeterID,
 				}
 			};
+
 			for (const meterID of action.meterIDs) {
 				const readingsForMeter = action.readings[meterID];
 				newState.byMeterID[meterID][timeInterval] = { isFetching: false, readings: readingsForMeter };

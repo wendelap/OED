@@ -60,20 +60,8 @@ router.get('/line/meters/:meter_ids', async (req, res) => {
 		const timeInterval = TimeInterval.fromString(req.query.timeInterval);
 		try {
 			const rawCompressedReadings = await Reading.getCompressedReadings(meterIDs, timeInterval.startTimestamp, timeInterval.endTimestamp, 100);
-			// todo: maybe optimize
-			const displayRanges = _.mapValues(rawCompressedReadings, readingsOfMeter => {
-				const minStart = _.minBy(readingsOfMeter, reading => reading.start_timestamp).start_timestamp;
-				const maxEnd = _.maxBy(readingsOfMeter, reading => reading.end_timestamp).end_timestamp;
-				return {
-					minStart,
-					maxEnd
-				};
-			});
 			const formattedCompressedReadings = _.mapValues(rawCompressedReadings, formatLineReadings);
-			res.json({
-				readings: formattedCompressedReadings,
-				displayRanges,
-			});
+			res.json(formattedCompressedReadings);
 		} catch (err) {
 			log.error(`Error while performing GET readings for line with meters ${meterIDs} with time interval ${timeInterval}: ${err}`, err);
 			res.sendStatus(500);

@@ -34,6 +34,7 @@ function mapStateToProps(state) {
 				// todo: This is the worst remaining hack.
 				for (const baseline of state.baselines.byMeterID) {
 					// If the meter of the baseline is being displayed, and the apply range falls into this arbitrary range:
+					// todo: this line is a proper rat bastard hack. I should be drawn and quartered if this makes it to a PR.
 					if (baseline.meterID === meterID && baseline.applyRange.contains(new TimeInterval(moment('2017-8-10'), moment()))) {
 						// Add this to the datasets
 						data.datasets.push({

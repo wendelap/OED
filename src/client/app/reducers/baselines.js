@@ -91,7 +91,6 @@ export default function baselines(state = defaultState, action) {
 			};
 
 		case baselinesActions.RECEIVE_ALL_BASELINES: {
-			console.log(action.data);
 			const newBaselines = action.data.map(baseline => ({
 				...baseline,
 				applyRange: new TimeInterval(baseline.applyRange.startTimestamp, baseline.applyRange.endTimestamp),
@@ -125,7 +124,7 @@ export default function baselines(state = defaultState, action) {
 				_.groupBy(newBaselines, 'meterID'), baselinesOfMeter =>
 					_.keyBy(baselinesOfMeter, baseline => baseline.applyRange.toString()
 				));
-			console.log(newByMeterID);
+			console.log(`logging this because I still don't actually use it: ${newByMeterID}`);
 			return {
 				...state,
 				byMeterID: newBaselines

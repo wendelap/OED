@@ -36,15 +36,4 @@ router.post('/new', async (req, res) => {
 	}
 });
 
-// todo: decide if this route should exist (it's weird!)
-router.post('/average', async (req, res) => {
-	try {
-		// todo: this definitely should not be just forwarding the entire request body
-		const average = await Baseline.getAverage(req.body);
-		res.send(average);
-	} catch (err) {
-		log(`Error while calculating average: ${err}`, 'error');
-	}
-});
-
 module.exports = router;

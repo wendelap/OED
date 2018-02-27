@@ -33,6 +33,7 @@ OED_DB_HOST=?                  // The host for your postgres db, likely localhos
 OED_DB_PORT=?                  // The port for your postgres db, likely 5432
 OED_TOKEN_SECRET=?             // Token for authentication. Generate something secure and random
 OED_LOG_FILE=?                 // Path to the log file, defaults to ./log.txt
+OED_OBVIUS_PASSWORD=?		   // Password for Obvius connector
 ```
 8. Run ```npm run createdb``` to create the database schema.
 1. Run `npm run addMamacMeters` to load mamac meters from an `.csv` file.
@@ -66,6 +67,10 @@ You can access the PostgreSQL database through the `database` service. Given tha
 * Get a Postgres shell with `docker-compose exec database psql -U oed`
 * Take a database dump with `docker-compose exec database pg_dump -U oed > dump_$(date +%Y-%m-%d"_"%H_%M_%S.sql)`
 * Restore a database dump with by first copying the dump into the container with `docker cp /path/to/dump.sql container_name:/dump.sql` and then restoring it into the database with `docker-compose exec database psql -U oed -f /dump.sql`.
+
+### Obvius Integration ###
+
+OED offers a basic integration with Obvius. 
 
 ### Upgrading the App ###
 

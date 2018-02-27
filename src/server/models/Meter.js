@@ -102,7 +102,8 @@ class Meter {
 
 Meter.type = {
 	MAMAC: 'mamac',
-	METASYS: 'metasys'
+	METASYS: 'metasys',
+	OBVIUS: 'obvius',
 };
 
 module.exports = Meter;

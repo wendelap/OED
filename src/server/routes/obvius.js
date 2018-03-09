@@ -72,12 +72,31 @@ function handleStatus(req, res) {
 }
 
 /**
- * Handle an Obvius upload request.
- * Unfortunately the Obvious API does not specify a HTTP verb.
+ * A middleware to lowercase all params.
  */
-router.all('/', async (req, res) => {
-	// Mixin for getting parameters from any possible method.
+router.use((req, res, next) => {
+	for (var key in req.query)
+	{
+		req.query[key.toLowerCase()] = req.query[key];
+	}
+	for (var key in req.params) {
+		req.params[key.toLowerCase()] = req.params[key];
+	}
+	if (req.body) {
+		for (var key in req.body) {
+			req.body[key.toLowerCase()] = req.body[key];
+		}
+	}
+	next();
+});
+
+/**
+ * A middleware to add our params mixin
+ */
+router.use((req, res, next) => {
+// Mixin for getting parameters from any possible method.
 	req.param = (param, defaultValue) => {
+		param = param.toLowerCase();
 		// If the param exists as a route param, use it.
 		if (typeof req.params[param] !== 'undefined') {
 			return req.params[param];
@@ -93,6 +112,14 @@ router.all('/', async (req, res) => {
 		// Return the default value if all else fails.
 		return defaultValue;
 	};
+
+});
+
+/**
+ * Handle an Obvius upload request.
+ * Unfortunately the Obvious API does not specify a HTTP verb.
+ */
+router.all('/', async (req, res) => {
 
 	// Log the IP of the requester
 	const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;

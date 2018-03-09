@@ -75,16 +75,21 @@ function handleStatus(req, res) {
  * A middleware to lowercase all params.
  */
 router.use((req, res, next) => {
-	for (var key in req.query)
-	{
-		req.query[key.toLowerCase()] = req.query[key];
+	for (const key in req.query) {
+		if (Object.prototype.hasOwnProperty.call(req.query, key)) {
+			req.query[key.toLowerCase()] = req.query[key];
+		}
 	}
-	for (var key in req.params) {
-		req.params[key.toLowerCase()] = req.params[key];
+	for (const key in req.params) {
+		if (Object.prototype.hasOwnProperty.call(req.params, key)) {
+			req.params[key.toLowerCase()] = req.params[key];
+		}
 	}
 	if (req.body) {
-		for (var key in req.body) {
-			req.body[key.toLowerCase()] = req.body[key];
+		for (const key in req.body) {
+			if (Object.prototype.hasOwnProperty.call(req.body, key)) {
+				req.body[key.toLowerCase()] = req.body[key];
+			}
 		}
 	}
 	next();
@@ -94,7 +99,7 @@ router.use((req, res, next) => {
  * A middleware to add our params mixin
  */
 router.use((req, res, next) => {
-// Mixin for getting parameters from any possible method.
+	// Mixin for getting parameters from any possible method.
 	req.param = (param, defaultValue) => {
 		param = param.toLowerCase();
 		// If the param exists as a route param, use it.
@@ -113,6 +118,7 @@ router.use((req, res, next) => {
 		return defaultValue;
 	};
 
+	next();
 });
 
 /**
@@ -120,7 +126,6 @@ router.use((req, res, next) => {
  * Unfortunately the Obvious API does not specify a HTTP verb.
  */
 router.all('/', async (req, res) => {
-
 	// Log the IP of the requester
 	const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	log.info(`Received Obvious protocol request from ${ip}`);

@@ -74,23 +74,21 @@ function handleStatus(req, res) {
 /**
  * A middleware to lowercase all params.
  */
-router.use((req, res, next) => {
-	for (const key of req.query) {
-		log.info(key);
-		req.query[key.toLowerCase()] = req.query[key];
+function lowercaseParams(req, res, next) {
+	for (const key of Object.entries(req.query)) {
+		req.query[key[0].toLowerCase()] = key[1];
 	}
-	for (const key of req.params) {
-		log.info(key);
-		req.params[key.toLowerCase()] = req.params[key];
+	for (const key of Object.entries(req.params)) {
+		req.params[key[0].toLowerCase()] = key[1];
 	}
 	if (req.body) {
-		for (const key of req.body) {
-			log.info(key);
-			req.body[key.toLowerCase()] = req.body[key];
+		for (const key of Object.entries(req.body)) {
+			req.body[key[0].toLowerCase()] = key[1];
 		}
 	}
 	next();
-});
+}
+router.use(lowercaseParams);
 
 /**
  * A middleware to add our params mixin

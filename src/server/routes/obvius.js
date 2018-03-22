@@ -75,21 +75,18 @@ function handleStatus(req, res) {
  * A middleware to lowercase all params.
  */
 router.use((req, res, next) => {
-	for (const key in req.query) {
-		if (Object.prototype.hasOwnProperty.call(req.query, key)) {
-			req.query[key.toLowerCase()] = req.query[key];
-		}
+	for (const key of req.query) {
+		log.info(key);
+		req.query[key.toLowerCase()] = req.query[key];
 	}
-	for (const key in req.params) {
-		if (Object.prototype.hasOwnProperty.call(req.params, key)) {
-			req.params[key.toLowerCase()] = req.params[key];
-		}
+	for (const key of req.params) {
+		log.info(key);
+		req.params[key.toLowerCase()] = req.params[key];
 	}
 	if (req.body) {
-		for (const key in req.body) {
-			if (Object.prototype.hasOwnProperty.call(req.body, key)) {
-				req.body[key.toLowerCase()] = req.body[key];
-			}
+		for (const key of req.body) {
+			log.info(key);
+			req.body[key.toLowerCase()] = req.body[key];
 		}
 	}
 	next();
@@ -131,15 +128,15 @@ router.all('/', async (req, res) => {
 	log.info(`Received Obvious protocol request from ${ip}`);
 
 	// Attempt to verify the password
-	if (!req.param('PASSWORD')) {
-		failure(req, res, 'PASSWORD parameter is required.');
+	if (!req.param('password')) {
+		failure(req, res, 'password parameter is required.');
 		return;
-	} else if (req.param('PASSWORD') !== config.obvius.password) {
-		failure(req, res, 'PASSWORD was not correct.');
+	} else if (req.param('password') !== config.obvius.password) {
+		failure(req, res, 'password was not correct.');
 		return;
 	}
 
-	const mode = req.param('MODE', false);
+	const mode = req.param('mode', false);
 	if (mode === false) {
 		failure(req, res, 'Request must include mode parameter.');
 		return;
@@ -175,7 +172,7 @@ router.all('/', async (req, res) => {
 		return;
 	}
 
-	failure(req, res, `Unknown MODE '${mode}'`);
+	failure(req, res, `Unknown mode '${mode}'`);
 });
 
 module.exports = router;

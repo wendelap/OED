@@ -136,8 +136,6 @@ router.all('/', async (req, res) => {
 	const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	log.info(`Received Obvious protocol request from ${ip}`);
 
-	log.info(`Received body: ${JSON.stringify(req.body)}`);
-
 	// Attempt to verify the password
 	if (!req.param('password')) {
 		failure(req, res, 'password parameter is required.');

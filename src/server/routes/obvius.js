@@ -164,7 +164,7 @@ router.all('/', async (req, res) => {
 	}
 
 	if (mode === MODE_LOGFILE_UPLOAD) {
-		log.log(`Received file: ${req.file}`);
+		log.info(`Received file: ${req.file}`);
 		failure(req, res, 'Logfile Upload Not Implemented');
 		return;
 	}

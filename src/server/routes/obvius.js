@@ -170,11 +170,7 @@ router.all('/', async (req, res) => {
 			frequency: 10,
 			chunkSize: 2048
 		});
-		rsb.put(req.file.buffer);
-		// No more data for the stream
-		rsb.stop();
-
-		log.info(rsb.read());
+		log.info(req.file.buffer);
 
 		failure(req, res, 'Logfile Upload Not Implemented');
 		return;

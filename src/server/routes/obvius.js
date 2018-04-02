@@ -173,7 +173,7 @@ router.all('/', async (req, res) => {
 		rsb.on('readable', () => {
 			let chunk = rsb.read();
 			while (chunk !== null) {
-				log.info(`Chunk of length ${chunk.length} with encoding ${chunk.encoding}: ${chunk.toString()}`);
+				log.info(`Chunk of length ${chunk.length}: ${chunk.toString('ascii')}`);
 				chunk = rsb.read();
 			}
 		});

@@ -178,6 +178,9 @@ router.all('/', async (req, res) => {
 			}
 		});
 
+		rsb.put(req.file.buffer);
+		rsb.stop();
+
 		failure(req, res, 'Logfile Upload Not Implemented');
 		return;
 	}

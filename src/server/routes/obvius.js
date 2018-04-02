@@ -170,7 +170,13 @@ router.all('/', async (req, res) => {
 			frequency: 10,
 			chunkSize: 2048
 		});
-		rsb.pipe(process.stdout);
+		rsb.on('readable', () => {
+			let chunk = rsb.read();
+			while (chunk !== null) {
+				log.info(`Chunk of length ${chunk.length} with encoding ${chunk.encoding}: ${chunk.toString()}`);
+				chunk = rsb.read();
+			}
+		});
 
 		failure(req, res, 'Logfile Upload Not Implemented');
 		return;

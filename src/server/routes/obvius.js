@@ -170,7 +170,7 @@ router.all('/', async (req, res) => {
 			frequency: 10,
 			chunkSize: 2048
 		});
-		log.info(req.file.buffer.toString());
+		rsb.pipe(process.stdout);
 
 		failure(req, res, 'Logfile Upload Not Implemented');
 		return;

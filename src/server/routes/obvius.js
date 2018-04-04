@@ -167,22 +167,13 @@ router.all('/', async (req, res) => {
 
 	if (mode === MODE_LOGFILE_UPLOAD) {
 		log.info(`Received file: ${req.file}`);
-		const rsb = new streamBuffers.ReadableStreamBuffer({
-			frequency: 10,
-			chunkSize: 2048
-		});
-
-		rsb.pipe(zlib.createGunzip()).on('readable', () => {
-			let chunk = rsb.read();
-			while (chunk !== null) {
-				// NOTE that, because the encoding is ASCII, 
-				log.info(`Chunk of length ${chunk.length}: ${chunk.toString('ascii')}`);
-				chunk = rsb.read();
+		zlib.gunzip(req.file.buffer, (err, buffer) => {
+			if (!err) {
+				log.info(buffer.toString('utf-8'));
+			} else {
+				log.error(err);
 			}
 		});
-
-		rsb.put(req.file.buffer);
-		rsb.stop();
 
 		failure(req, res, 'Logfile Upload Not Implemented');
 		return;

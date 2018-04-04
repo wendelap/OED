@@ -15,6 +15,7 @@
 const express = require('express');
 const config = require('../config');
 const multer = require('multer');
+const zlib = require('zlib');
 const { log } = require('../log');
 const streamBuffers = require('stream-buffers');
 
@@ -170,9 +171,11 @@ router.all('/', async (req, res) => {
 			frequency: 10,
 			chunkSize: 2048
 		});
-		rsb.on('readable', () => {
+
+		rsb.pipe(zlib.createGunzip()).on('readable', () => {
 			let chunk = rsb.read();
 			while (chunk !== null) {
+				// NOTE that, because the encoding is ASCII, 
 				log.info(`Chunk of length ${chunk.length}: ${chunk.toString('ascii')}`);
 				chunk = rsb.read();
 			}

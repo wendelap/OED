@@ -14,7 +14,7 @@ class Conversion {
 	 * @param toVersion version want to update to
 	 * @param updateTime time when migrate database
 	 */
-	constructor(id, fromVersion, toVersion, updateTime) {
+	constructor(id, resourceType, unitName, conversionFactor) {
 		this.id = id;
 		this.fromVersion = fromVersion;
 		this.toVersion = toVersion;

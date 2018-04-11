@@ -16,9 +16,9 @@ class Conversion {
 	 */
 	constructor(id, resourceType, unitName, conversionFactor) {
 		this.id = id;
-		this.fromVersion = fromVersion;
-		this.toVersion = toVersion;
-		this.updateTime = updateTime;
+		this.resourceType = resourceType;
+		this.unitName = unitName;
+		this.conversionFactor = conversionFactor;
 	}
 
 	/**
@@ -26,8 +26,7 @@ class Conversion {
 	 * @return {Promise.<>}
 	 */
 	static async createTable() {
-		await db.none(sqlFile('migration/create_migration_table.sql'));
-		await Migration.insertDefaultMigration();
+		await db.none(sqlFile('conversion/create_conversion_table.sql'));
 	}
 
 	static async insertDefaultMigration() {

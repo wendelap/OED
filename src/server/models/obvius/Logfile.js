@@ -11,14 +11,17 @@ class Logfile {
 	/**
 	 * 
 	 * @param {number} id This Logfile's ID. Undefined if this file is being created.
+	 * @param {string} ipAddress The IP Address from which this logfile was uploaded.
 	 * @param {string} filename The filename of this logfile.
 	 * @param {moment} created The time at which this logfile was created.
 	 * @param {string} hash The MD5 sum of the contents of this file.
 	 * @param {string} contents The contents of this file, as received from AquiSuite.
 	 * @param {boolean} processed Whether or not this logfile has been processed.
 	 */
-	constructor(id, filename, created, hash, contents, processed) {
+	constructor(id, ipAddress, filename, created, hash, contents, processed) {
 		this.id = id;
+		console.log(`Creating object with ip address ${ipAddress}`);
+		this.ipAddress = ipAddress;
 		this.filename = filename;
 		this.created = created;
 		this.hash = hash;
@@ -35,7 +38,7 @@ class Logfile {
 	}
 
 	static mapRow(row) {
-		return new Logfile(row.id, row.filename, row.created, row.hash, row.contents, row.processed);
+		return new Logfile(row.id, row.ipAddress, row.filename, row.created, row.hash, row.contents, row.processed);
 	}
 
 	/**
@@ -44,6 +47,7 @@ class Logfile {
 	 * @param conn The connection to use. Defaults to the default DB connection.
 	 */
 	static async getByID(id, conn = db) {
+		console.log(`Getting row by ID ${id}`);
 		const row = await conn.one(sqlFile('obvius/get_logs_by_id.sql'), {id: id});
 		return Logfile.mapRow(row);
 	}
@@ -59,6 +63,7 @@ class Logfile {
 
 	async insert(conn = db) {
 		const logfile = this;
+		console.log(logfile.ipAddress);
 		if (this.id !== undefined) {
 			throw new Error('Attempt to insert a Logfile with an existing ID.');
 		}

@@ -36,7 +36,7 @@ mocha.describe('Logfiles', () => {
 		const ipAddress = '0.0.0.0';
 		const logfilePreInsert = new Logfile(undefined, ipAddress, filename, moment(), chash, contents, false);
 		await logfilePreInsert.insert();
-		const logfilePostInsertByID = await Logfile.getAll()[0];
+		const logfilePostInsertByID = await Logfile.getByID(1);
 		expectLogfilesToBeEquivalent(logfilePreInsert, logfilePostInsertByID);
 	});
 });

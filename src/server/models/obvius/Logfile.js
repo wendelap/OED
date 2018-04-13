@@ -9,7 +9,7 @@ const sqlFile = database.sqlFile;
 
 class Logfile {
 	/**
-	 * 
+	 *
 	 * @param {number} id This Logfile's ID. Undefined if this file is being created.
 	 * @param {string} ipAddress The IP Address from which this logfile was uploaded.
 	 * @param {string} filename The filename of this logfile.
@@ -38,12 +38,12 @@ class Logfile {
 	}
 
 	static mapRow(row) {
-		return new Logfile(row.id, row.ipAddress, row.filename, row.created, row.hash, row.contents, row.processed);
+		return new Logfile(row.id, row.ip_address, row.filename, row.created, row.hash, row.contents, row.processed);
 	}
 
 	/**
 	 * Returns a promise to get a specific logfile by ID
-	 * @param {number} id 
+	 * @param {number} id
 	 * @param conn The connection to use. Defaults to the default DB connection.
 	 */
 	static async getByID(id, conn = db) {
@@ -54,7 +54,7 @@ class Logfile {
 
 	/**
 	 * Returns a promise to get all the logfiles stored.
-	 * @param conn The connection to use. Defaults to the default DB connection. 
+	 * @param conn The connection to use. Defaults to the default DB connection.
 	 */
 	static async getAll(conn = db) {
 		const rows = await conn.any(sqlFile("obvius/get_all_logs.sql"));

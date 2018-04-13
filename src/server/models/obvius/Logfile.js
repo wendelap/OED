@@ -20,7 +20,6 @@ class Logfile {
 	 */
 	constructor(id, ipAddress, filename, created, hash, contents, processed) {
 		this.id = id;
-		console.log(`Creating object with ip address ${ipAddress}`);
 		this.ipAddress = ipAddress;
 		this.filename = filename;
 		this.created = created;
@@ -47,7 +46,6 @@ class Logfile {
 	 * @param conn The connection to use. Defaults to the default DB connection.
 	 */
 	static async getByID(id, conn = db) {
-		console.log(`Getting row by ID ${id}`);
 		const row = await conn.one(sqlFile('obvius/get_logs_by_id.sql'), {id: id});
 		return Logfile.mapRow(row);
 	}
@@ -63,7 +61,6 @@ class Logfile {
 
 	async insert(conn = db) {
 		const logfile = this;
-		console.log(logfile.ipAddress);
 		if (this.id !== undefined) {
 			throw new Error('Attempt to insert a Logfile with an existing ID.');
 		}

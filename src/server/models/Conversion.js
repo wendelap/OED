@@ -27,50 +27,64 @@ class Conversion {
 	 */
 	static async createTable() {
 		await db.none(sqlFile('conversion/create_conversion_table.sql'));
+		await db.none(sqlFile('conversion/insert_default_conversions.sql'));
 	}
 
-	static async insertDefaultMigration() {
-		const version = `${VERSION.major}.${VERSION.minor}.${VERSION.patch}`;
-		await db.tx(async t => {
-			const migration = new Migration(undefined, undefined, version);
-			migration.insert(t);
-		});
+	static createResourceTypesEnum() {
+		return db.none(sqlFile('conversion/create_resource_types_enum.sql'));
 	}
 
-	/**
-	 * Returns a promise to insert this migration into the database
-	 * @param conn the connection to use. Defaults to the default database connection.
-	 * @returns {Promise.<>}
-	 */
-	async insert(conn = db) {
-		const migration = this;
-		if (migration.id !== undefined) {
-			throw new Error('Attempt to insert a migration that already has an ID');
+	static async insert(conn = db) {
+		const conversion = this;
+		if (conversion.id !== undefined) {
+			throw new Error('Attempt to insert conversion that already has an id.')
 		}
-		const resp = await conn.one(sqlFile('migration/insert_new_migration.sql'), migration);
+		const resp = await conn.one(sqlFile('conversion/insert_new_conversion.sql'), conversion);
 		this.id = resp.id;
 	}
 
 	/**
-	 * Returns a promise to retrieve the current version of the database.
-	 * @returns {Promise.<Migration>}
+	 * Returns a promise to get all of the conversions from the database
+	 * @returns {Promise.<Conversion>}
 	 */
-	static async getCurrentVersion() {
-		const migrations = await Migration.getAll();
-		return findMaxSemanticVersion(migrations.map(m => m.toVersion));
+	static async getAll() {
+		const rows = await db.any(sqlFile('migration/get_all_conversions.sql'));
+		if (rows.length > 0) {
+			return rows.map(row => new Conversion(row.id, row.resourct_type, row.unit_name, row.conversion_factor));
+		} else {
+			throw new Error('There is no item in conversion table or table does not exists');
+		}
 	}
 
 	/**
-	 * Returns a promise to get all of the migration from the database
-	 * @returns {Promise.<array.<User>>}
+	 * Returns a promise to retrieve the meter with the given id from the database.
+	 * @param id the id of the meter to retrieve
+	 * @returns {Promise.<Conversion>}
 	 */
-	static async getAll() {
-		const rows = await db.any(sqlFile('migration/get_all_migrations.sql'));
-		if (rows.length > 0) {
-			return rows.map(row => new Migration(row.id, row.from_version, row.to_version, row.update_time));
-		} else {
-			throw new Error('There is no item in migration table or table does not exists');
-		}
+	static async getAllByResource(resourceType) {
+		const rows = await conn.any(sqlFile('conversion/get_conversions_by_type.sql'), { resourceType: resourceType});
+		return rows.map(Conversion.mapRow)
+	}
+
+	static async getConversionByResourceAndUnit(resourceType, unitName) {
+		const row = await conn.one(sqlFile('conversion/get_conversion_by_type_and_unit.sql'),
+			{resource_type: resourceType, unit_name: unitName});
+		return Conversion.mapRow(row);
+	}
+
+	static mapRow(row) {
+		return new Conversion(row.id, row.resourceType, row.unitName, row.conversionFactor);
 	}
 }
-module.exports = Migration;
+
+Conversion.resourceType = {
+	ENERGY: 'energy',
+	TEMPERATURE: 'temperature',
+	PRESSURE: 'pressure',
+	VOLUME: 'volume',
+	FLOW_RATE: 'flow_rate',
+	MASS: 'mass',
+	POWER: 'power'
+};
+
+module.exports = Conversion;

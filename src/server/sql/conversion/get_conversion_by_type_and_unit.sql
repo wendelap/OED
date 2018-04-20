@@ -2,10 +2,5 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
--- create conversion table
-CREATE TABLE IF NOT EXISTS conversions (
-	id SERIAL PRIMARY KEY,
-	resource_type VARCHAR(20) NOT NULL,
-	unit_name VARCHAR(20) NOT NULL,
-	conversion_factor FLOAT NOT NULL
-);
+SELECT * FROM conversions
+WHERE resource_type=${resource_type} AND unit_name=${unit_name};

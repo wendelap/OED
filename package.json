@@ -18,7 +18,9 @@
     "addMamacMeters": "node ./src/server/services/addMamacMeters.js",
     "updateMamacMeters": "node ./src/server/services/updateMamacMeters.js",
     "createUser": "node ./src/server/services/user/createUser.js",
-    "editUser": "node ./src/server/services/user/editUser.js"
+    "editUser": "node ./src/server/services/user/editUser.js",
+    "obvius:showLogfiles": "node ./src/server/services/obvius/showLogfiles.js",
+    "obvius:purgeLogfiles": "node ./src/server/services/obvius/purgeLogfiles.js"
   },
   "dependencies": {
     "axios": "~0.16.2",

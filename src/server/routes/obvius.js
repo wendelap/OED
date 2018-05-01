@@ -190,7 +190,7 @@ router.all('/', async (req, res) => {
 				loadLogfileToReadings(req.param('serialnumber'), ip, data);
 		}
 
-		failure(req, res, 'Logfile Upload Not Implemented');
+		success(req, res, 'Logfile Upload IS PROVISIONAL');
 		return;
 	}
 

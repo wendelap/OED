@@ -16,7 +16,7 @@ const promisify = require('es6-promisify');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 const recreateDB = require('./common').recreateDB;
-const getDB = require('../../models/database').getDB;
+const db = require('../../models/database').db;
 const Meter = require('../../models/Meter');
 const loadFromCsvStream = require('../../services/loadFromCsvStream');
 
@@ -50,7 +50,7 @@ mocha.describe('Read mamc log from a file: ', () => {
 				return new Reading(meter.id, readRate, startTimestamp, endTimestamp);
 			},
 			(readings, tx) => Reading.insertOrUpdateAll(readings, tx));
-		const { count } = await getDB().one('SELECT COUNT(*) as count FROM readings');
+		const { count } = await db.one('SELECT COUNT(*) as count FROM readings');
 		expect(parseInt(count)).to.equal(20);
 	});
 
@@ -92,7 +92,7 @@ mocha.describe('Read mamc log from a file: ', () => {
 				return new Reading(meter.id, readRate, startTimestamp, endTimestamp);
 			}, (readings, tx) => Reading.insertOrUpdateAll(readings, tx));
 		} catch (e) {
-			const { count } = await getDB().one('SELECT COUNT(*) as count FROM readings');
+			const { count } = await db.one('SELECT COUNT(*) as count FROM readings');
 			expect(parseInt(count)).to.equal(0);
 		}
 	});

@@ -6,7 +6,7 @@ const database = require('./database');
 const { findMaxSemanticVersion } = require('../util');
 const VERSION = require('../version');
 
-const getDB = database.getDB;
+const db = database.db;
 const sqlFile = database.sqlFile;
 
 class Migration {
@@ -28,13 +28,13 @@ class Migration {
 	 * @return {Promise.<>}
 	 */
 	static async createTable() {
-		await getDB().none(sqlFile('migration/create_migration_table.sql'));
+		await db.none(sqlFile('migration/create_migration_table.sql'));
 		await Migration.insertDefaultMigration();
 	}
 
 	static async insertDefaultMigration() {
 		const version = `${VERSION.major}.${VERSION.minor}.${VERSION.patch}`;
-		await getDB().tx(async t => {
+		await db.tx(async t => {
 			const migration = new Migration(undefined, undefined, version);
 			migration.insert(() => t);
 		});
@@ -45,12 +45,12 @@ class Migration {
 	 * @param conn the connection to use. Defaults to the default database connection.
 	 * @returns {Promise.<>}
 	 */
-	async insert(conn = getDB) {
+	async insert(conn = db) {
 		const migration = this;
 		if (migration.id !== undefined) {
 			throw new Error('Attempt to insert a migration that already has an ID');
 		}
-		const resp = await conn().one(sqlFile('migration/insert_new_migration.sql'), migration);
+		const resp = await conn.one(sqlFile('migration/insert_new_migration.sql'), migration);
 		this.id = resp.id;
 	}
 
@@ -68,7 +68,7 @@ class Migration {
 	 * @returns {Promise.<array.<User>>}
 	 */
 	static async getAll() {
-		const rows = await getDB().any(sqlFile('migration/get_all_migrations.sql'));
+		const rows = await db.any(sqlFile('migration/get_all_migrations.sql'));
 		if (rows.length > 0) {
 			return rows.map(row => new Migration(row.id, row.from_version, row.to_version, row.update_time));
 		} else {

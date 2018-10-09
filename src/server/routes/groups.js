@@ -7,7 +7,7 @@ const _ = require('lodash');
 const validate = require('jsonschema').validate;
 
 const Group = require('../models/Group');
-const getDB = require('../models/database').getDB;
+const db = require('../models/database').db;
 const authenticator = require('./authenticator');
 const { log } = require('../log');
 
@@ -139,7 +139,7 @@ router.post('/create', async (req, res) => {
 		res.sendStatus(400);
 	} else {
 		try {
-			await getDB().tx(async t => {
+			await db.tx(async t => {
 				const newGroup = new Group(undefined, req.body.name);
 				await newGroup.insert(() => t);
 				const adoptGroupsQuery = req.body.childGroups.map(gid => newGroup.adoptGroup(gid, t));
@@ -190,7 +190,7 @@ router.put('/edit', async (req, res) => {
 			const currentChildGroups = await Group.getImmediateGroupsByGroupID(currentGroup.id);
 			const currentChildMeters = await Group.getImmediateMetersByGroupID(currentGroup.id);
 
-			await getDB().tx(t => {
+			await db.tx(t => {
 				let nameChangeQuery = [];
 				if (req.body.name !== currentGroup.name) {
 					nameChangeQuery = currentGroup.rename(req.body.name, t);

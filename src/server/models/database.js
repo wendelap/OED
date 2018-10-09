@@ -22,32 +22,7 @@ patchMomentType(pgp);
  * The connection to the database
  * @type {pgPromise.IDatabase}
  */
-let db;
-let currentDB = null;
-
-/**
- * Get a new connection to the database.
- * @return {pgPromise.IDatabase}
- */
-function getDB() {
-	// Only create a new connection if we've changed databases or have no
-	// current connection.
-	if (currentDB === null || currentDB !== config.database.database) {
-		stopDB();
-		currentDB = null;
-		db = pgp(config.database);
-		currentDB = config.database.database;
-	}
-	return db;
-}
-
-/**
- * Get the name of the database current being worked on.
- * @return {string}
- */
-function getCurrentDB() {
-	return currentDB;
-}
+const db = pgp(config.database);
 
 /**
  * Closes the connection pool and stops pg-promise
@@ -104,15 +79,11 @@ async function createSchema() {
 	await Group.createTables();
 	await Migration.createTable();
 	await LogEmail.createTable();
-	await getDB().none(sqlFile('reading/create_function_get_compressed_readings.sql'));
+	await db.none(sqlFile('reading/create_function_get_compressed_readings.sql'));
 }
 
-// Create a new database connection.
-// db = getDB();
-
 module.exports = {
-	getDB,
-	currentDB: getCurrentDB,
+	db,
 	sqlFile,
 	createSchema,
 	pgp,

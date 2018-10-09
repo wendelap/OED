@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-const getDB = require('../models/database').getDB;
+const db = require('../models/database').db;
 const Migration = require('../models/Migration');
 const { compareSemanticVersion } = require('../util');
 const { log } = require('../log');
@@ -147,7 +147,7 @@ function getRequiredFilesToMigrate(curr, to, path) {
  */
 async function migrateDatabaseTransaction(neededFiles, allMigrationFiles) {
 	try {
-		await getDB().tx(async t => {
+		await db.tx(async t => {
 			for (const neededFile of neededFiles) {
 				for (const migrationFile of allMigrationFiles) {
 					if (neededFile.fromVersion === migrationFile.fromVersion && neededFile.toVersion === migrationFile.toVersion) {

@@ -67,7 +67,7 @@ class Reading {
 	static insertAll(readings, conn = db) {
 		return conn.tx(t => t.sequence(function seq(i) {
 			const seqT = this;
-			return readings[i] && readings[i].insert(conn = () => seqT);
+			return readings[i] && readings[i].insert(conn = seqT);
 		}));
 	}
 
@@ -80,7 +80,7 @@ class Reading {
 	static insertOrUpdateAll(readings, conn = db) {
 		return conn.tx(t => t.sequence(function seq(i) {
 			const seqT = this;
-			return readings[i] && readings[i].insertOrUpdate(conn = () => seqT);
+			return readings[i] && readings[i].insertOrUpdate(conn = seqT);
 		}));
 	}
 

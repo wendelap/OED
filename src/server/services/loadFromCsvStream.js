@@ -32,7 +32,7 @@ function loadFromCsvStream(stream, mapRowToModel, bulkInsertModels) {
 		const parser = csv.parse();
 
 		function insertQueuedModels() {
-			const insert = bulkInsertModels(modelsToInsert, () => t);
+			const insert = bulkInsertModels(modelsToInsert, t);
 			pendingInserts.push(insert);
 			modelsToInsert = [];
 		}

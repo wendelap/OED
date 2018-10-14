@@ -43,7 +43,7 @@ mocha.describe('Migration Valid', () => {
 		// that's the whole point. But, these tests require that the
 		// table is in a specific state, so I'll delete the records here.
 		db.none('TRUNCATE TABLE migrations');
-		await new Migration(undefined, '0.0.0', '0.100.0').insert();
+		await new Migration(undefined, '0.0.0', '0.100.0').insert(db);
 	});
 
 	mocha.it('should call correct up method for and insert new row into database', async () => {

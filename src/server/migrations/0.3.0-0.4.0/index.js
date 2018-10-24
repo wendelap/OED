@@ -9,12 +9,9 @@ module.exports = {
 	fromVersion: '0.3.0',
 	toVersion: '0.4.0',
 	up: async db => {
-		try {
 			await db.none(sqlFile('../migrations/0.3.0-0.4.0/sql/preferences/create_language_types_enum.sql'));
 			await db.none(sqlFile('../migrations/0.3.0-0.4.0/sql/preferences/add_language_column.sql'));
 			await db.none(sqlFile('../migrations/0.3.0-0.4.0/sql/logemail/create_log_table.sql'));
-		} catch (err) {
-			throw new Error('Error while migrating each sql file');
-		}
 	}
-};
+}
+

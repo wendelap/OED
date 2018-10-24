@@ -151,13 +151,9 @@ async function migrateDatabaseTransaction(neededFiles, allMigrationFiles) {
 			for (const neededFile of neededFiles) {
 				for (const migrationFile of allMigrationFiles) {
 					if (neededFile.fromVersion === migrationFile.fromVersion && neededFile.toVersion === migrationFile.toVersion) {
-						try {
-							await migrationFile.up(() => t);
+							await migrationFile.up(t);
 							const migration = new Migration(undefined, migrationFile.fromVersion, migrationFile.toVersion);
 							await migration.insert(() => t);
-						} catch (err) {
-							throw new Error('Migration Transaction Failed');
-						}
 					}
 				}
 			}

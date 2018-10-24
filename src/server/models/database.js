@@ -57,6 +57,7 @@ async function createSchema() {
 	const Preferences = require('./Preferences');
 	const Configfile = require('./obvius/Configfile');
 	const Migration = require('./Migration');
+	const LogEmail = require('./LogEmail');
 	/* eslint-enable global-require */
 	await Meter.createMeterTypesEnum();
 	await Meter.createTable();
@@ -69,6 +70,7 @@ async function createSchema() {
 	await Preferences.createTable();
 	await Group.createTables();
 	await Migration.createTable();
+	await LogEmail.createTable();
 	await db.none(sqlFile('reading/create_function_get_compressed_readings.sql'));
 	await Configfile.createTable();
 }

@@ -18,10 +18,10 @@ mocha.describe('meters API', () => {
 
 	mocha.it('returns all visible meters', async () => {
 		const conn = testDB.getConnection();
-		await new Meter(undefined, 'Meter 1', '1.1.1.1', true, true, Meter.type.MAMAC).insert(conn);
-		await new Meter(undefined, 'Meter 2', '1.1.1.1', true, true, Meter.type.MAMAC).insert(conn);
-		await new Meter(undefined, 'Meter 3', '1.1.1.1', true, true, Meter.type.MAMAC).insert(conn);
-		await new Meter(undefined, 'Not Visible', '1.1.1.1', true, false, Meter.type.MAMAC).insert(conn);
+		await new Meter(undefined, 'Meter 1', '1.1.1.1', true, true, Meter.type.MAMAC, Timezone.type.CENTRAL).insert(conn);
+		await new Meter(undefined, 'Meter 2', '1.1.1.1', true, true, Meter.type.MAMAC, Timezone.type.CENTRAL).insert(conn);
+		await new Meter(undefined, 'Meter 3', '1.1.1.1', true, true, Meter.type.MAMAC, Timezone.type.CENTRAL).insert(conn);
+		await new Meter(undefined, 'Not Visible', '1.1.1.1', true, false, Meter.type.MAMAC, Timezone.type.CENTRAL).insert(conn);
 
 		const res = await chai.request(app).get('/api/meters');
 		expect(res).to.have.status(200);
@@ -46,10 +46,10 @@ mocha.describe('meters API', () => {
 		});
 		mocha.it('returns all meters', async () => {
 			const conn = testDB.getConnection();
-			await new Meter(undefined, 'Meter 1', '1.1.1.1', true, true, Meter.type.MAMAC).insert(conn);
-			await new Meter(undefined, 'Meter 2', '1.1.1.1', true, true, Meter.type.MAMAC).insert(conn);
-			await new Meter(undefined, 'Meter 3', '1.1.1.1', true, true, Meter.type.MAMAC).insert(conn);
-			await new Meter(undefined, 'Not Visible', '1.1.1.1', true, false, Meter.type.MAMAC).insert(conn);
+			await new Meter(undefined, 'Meter 1', '1.1.1.1', true, true, Meter.type.MAMAC, Timezone.type.CENTRAL).insert(conn);
+			await new Meter(undefined, 'Meter 2', '1.1.1.1', true, true, Meter.type.MAMAC, Timezone.type.CENTRAL).insert(conn);
+			await new Meter(undefined, 'Meter 3', '1.1.1.1', true, true, Meter.type.MAMAC, Timezone.type.CENTRAL).insert(conn);
+			await new Meter(undefined, 'Not Visible', '1.1.1.1', true, false, Meter.type.MAMAC, Timezone.type.CENTRAL).insert(conn);
 
 			const res = await chai.request(app).get('/api/meters').set('token', token);
 			expect(res).to.have.status(200);
@@ -69,8 +69,8 @@ mocha.describe('meters API', () => {
 
 	mocha.it('returns details on a single meter by ID', async () => {
 		const conn = testDB.getConnection();
-		await new Meter(undefined, 'Meter 1', '1.1.1.1', true, true, Meter.type.MAMAC).insert(conn);
-		const meter2 = new Meter(undefined, 'Meter 2', '1.1.1.1', true, true, Meter.type.MAMAC);
+		await new Meter(undefined, 'Meter 1', '1.1.1.1', true, true, Meter.type.MAMAC, Timezone.type.CENTRAL).insert(conn);
+		const meter2 = new Meter(undefined, 'Meter 2', '1.1.1.1', true, true, Meter.type.MAMAC, Timezone.type.CENTRAL);
 		await meter2.insert(conn);
 
 		const res = await chai.request(app).get(`/api/meters/${meter2.id}`);
@@ -82,7 +82,7 @@ mocha.describe('meters API', () => {
 
 	mocha.it('responds appropriately when the meter in question does not exist', async () => {
 		const conn = testDB.getConnection();
-		const meter = new Meter(undefined, 'Meter', '1.1.1.1', true, true, Meter.type.MAMAC);
+		const meter = new Meter(undefined, 'Meter', '1.1.1.1', true, true, Meter.type.MAMAC, Timezone.type.CENTRAL);
 		await meter.insert(conn);
 
 		const res = await chai.request(app).get(`/api/meters/${meter.id + 1}`);

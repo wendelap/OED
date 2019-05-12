@@ -15,14 +15,16 @@ class Meter {
 	 * @param enabled This meter is being actively read from
 	 * @param displayable This meters is available to users for charting
 	 * @param type What kind of meter this is
+	 * @param timezone What timezone this meter is in
 	 */
-	constructor(id, name, ipAddress, enabled, displayable, type) {
+	constructor(id, name, ipAddress, enabled, displayable, type, timezone) {
 		this.id = id;
 		this.name = name;
 		this.ipAddress = ipAddress;
 		this.enabled = enabled;
 		this.displayable = displayable;
 		this.type = type;
+		this.timezone = timezone;
 	}
 
 	/**
@@ -42,6 +44,15 @@ class Meter {
 	 */
 	static createMeterTypesEnum(conn) {
 		return conn.none(sqlFile('meter/create_meter_types_enum.sql'));
+	}
+
+	/**
+	 * Returns a promise to create the timezone_type type.
+	 * This needs to be run before Meter.createTable().
+	 * @return {Promise<void>}
+	 */
+	static createTimezoneTypesEnum() {
+		return getDB().none(sqlFile('meter/create_timezone_types_enum.sql'));
 	}
 
 	/**
@@ -66,7 +77,7 @@ class Meter {
 	}
 
 	static mapRow(row) {
-		return new Meter(row.id, row.name, row.ipaddress, row.enabled, row.displayable, row.meter_type);
+		return new Meter(row.id, row.name, row.ipaddress, row.enabled, row.meter_type, row.displayable, row.timezone);
 	}
 
 	/**
@@ -151,5 +162,12 @@ Meter.type = {
 	MAMAC: 'mamac',
 	METASYS: 'metasys'
 };
+
+Timezone.type = {
+	EASTERN: 'ET',
+	CENTRAL: 'CT',
+	MOUNTAIN: 'MT',
+	PACIFIC: 'PT'
+}
 
 module.exports = Meter;

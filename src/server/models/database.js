@@ -80,6 +80,7 @@ async function createSchema(conn) {
 
 	/* eslint-enable global-require */
 	await Meter.createMeterTypesEnum(conn);
+	await Meter.createTimezoneTypesEnum();
 	await Meter.createTable(conn);
 	await Reading.createTable(conn);
 	await Reading.createCompressedReadingsFunction(conn);
